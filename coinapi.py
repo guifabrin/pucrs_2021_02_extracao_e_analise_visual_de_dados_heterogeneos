@@ -39,7 +39,7 @@ def get_historical_btc():
             if len(keys) == 0:
                 break
             try:
-                print(get(directory+'get_historical_btc_' + str_date_filename + '.json',
+                print(get(directory + str_date_filename + '.json',
                           'https://rest.coinapi.io/v1/ohlcv/BITSTAMP_SPOT_BTC_USD/history?period_id=1MIN&time_start=' + str_date,
                           {'X-CoinAPI-Key': keys[0]}))
                 break
