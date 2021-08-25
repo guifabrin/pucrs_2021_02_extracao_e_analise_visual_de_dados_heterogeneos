@@ -9,7 +9,7 @@ from sqlalchemy import create_engine, func
 from sqlalchemy.orm import Session
 from models import Tweet
 
-engine = create_engine("mysql+pymysql://root:@localhost/mt5_twitter?charset=utf8mb4", echo=True)
+engine = create_engine("mysql+pymysql://root:@localhost/mt5_twitter?charset=utf8mb4")
 session = Session(bind=engine)
 
 register_matplotlib_converters()
@@ -17,7 +17,7 @@ tick = "VALE3"
 query = 'brumadinho'
 count = 1000000
 date_init = datetime(2019, 1, 1)
-date_end = datetime(2019, 1, 31)
+date_end = datetime(2021, 12, 31)
 
 if not mt5.initialize():
     mt5.shutdown()

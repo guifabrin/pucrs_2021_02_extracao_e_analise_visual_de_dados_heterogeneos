@@ -20,6 +20,7 @@ def fetch(query, date_init, date_end):
             session.add(db_tweet)
             session.commit()
         except Exception as e:
+            session.rollback()
             print(e)
 
 
