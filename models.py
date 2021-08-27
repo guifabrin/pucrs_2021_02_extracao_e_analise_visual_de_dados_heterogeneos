@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Text, String, DateTime
+from sqlalchemy import Column, Text, String, Integer, DateTime
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -9,3 +9,5 @@ class Tweet(Base):
      user_id = Column(String)
      content = Column(Text)
      datetime = Column(DateTime)
+     favorite_count = Column(Integer)
+     retweet_count = Column(Integer)

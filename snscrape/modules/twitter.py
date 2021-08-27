@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class Tweet(snscrape.base.Item):
-	def __init__(self, url, date, content, tweetID, username, outlinks, outlinkss, tcooutlinks, tcooutlinkss, user_id):
+	def __init__(self, url, date, content, tweetID, username, outlinks, outlinkss, tcooutlinks, tcooutlinkss, user_id, favorite_count, retweet_count):
 		self.url = url
 		self.date = date
 		self.content = content
@@ -24,6 +24,8 @@ class Tweet(snscrape.base.Item):
 		self.tcooutlinks = tcooutlinks
 		self.tcooutlinkss = tcooutlinkss
 		self.user_id = user_id
+		self.favorite_count = favorite_count
+		self.retweet_count = retweet_count
 
 	def __str__(self):
 		return self.url
@@ -202,7 +204,7 @@ class TwitterSearchScraper(TwitterCommonScraper):
 						outlinks = [u['expanded_url'] for u in tweet['entities']['urls']]
 						tcooutlinks = [u['url'] for u in tweet['entities']['urls']]
 						url = f'https://twitter.com/{username}/status/{tweetID}'
-						yield Tweet(url, date, content, tweetID, username, outlinks, ' '.join(outlinks), tcooutlinks, ' '.join(tcooutlinks), tweet['user_id_str'])
+						yield Tweet(url, date, content, tweetID, username, outlinks, ' '.join(outlinks), tcooutlinks, ' '.join(tcooutlinks), tweet['user_id_str'], tweet['favorite_count'], tweet['retweet_count'])
 					elif entry['entryId'] == 'sq-cursor-bottom':
 						newCursor = entry['content']['operation']['cursor']['value']
 			if not newCursor or newCursor == cursor:
