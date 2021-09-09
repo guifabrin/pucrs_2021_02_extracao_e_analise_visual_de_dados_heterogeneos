@@ -1,3 +1,5 @@
 venv/
 /.idea/
 /__pychache__/
+query.sql
+mysql_to_mongodb.py

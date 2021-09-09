@@ -10,8 +10,9 @@ Utiliza um web crawler para aquisição de tweets e a biblioteca MT5 da platafor
 - --query [-q] o que deve haver no Tweet
 - --since [-s] desde quando deve ser executada a pesquisa
 - --until [-u] até quando deve ser executada a pesquisa
+- --method [-m] onde deveria gravar: mongodb ou mysql
 ```
-python fetch_twitter_to_mysql.py -q petrobras -s "2021-01-01" -u "2021-12-31"
+python fetch_and_store.py -q petrobras -s "2021-01-01" -u "2021-12-31" -m mongodb
 ```
 
 ### Plotagem de dados
@@ -29,6 +30,9 @@ python fetch_twitter_to_mysql.py -q petrobras -s "2021-01-01" -u "2021-12-31"
 python pytwitter_mysql.py -t PETR4 -c 10000000 -q petrobras -s "2019-01-01 00:00:00" -u "2021-08-31 23:59:59" -f TIMEFRAME_D1 -p "C:\Users\guilh\Goo
 gle Drive\Estudos\PPGCC\2021\02\Extração e Análise de Dados Heterogêneos\Programa"
 ```
+
+##### TODO
+- [ ] Plotagem via MongoDB
 
 #### Resultado
 ![plotagem](docs/PETR4_petrobras_2021-08-01_2021-08-31_H1.png)

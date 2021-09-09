@@ -3,13 +3,15 @@
 from datetime import datetime
 import MetaTrader5 as mt5
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from pandas.plotting import register_matplotlib_converters
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sql_formatter.core import format_sql
 import argparse
-
+import matplotlib.dates as mpl_dates
+from mpl_finance import candlestick_ohlc
 
 engine = create_engine("mysql+pymysql://root:@localhost/mt5_twitter?charset=utf8mb4")
 session = Session(bind=engine)
@@ -55,7 +57,14 @@ fig.suptitle('{} x twitter count about "{}" from {} to {} in timeframe {}'.forma
 print('copy done, adding dates not found with frequency {}'.format(panda_frequency))
 s = pd.Series(ticks['close'], ticks_frame['time'])
 frequency_result = s.asfreq(panda_frequency)
-axs[0].plot(frequency_result)
+
+ohlc = ticks_frame.loc[:, ['time', 'open', 'high', 'low', 'close']]
+ohlc['time'] = ticks_frame['time']
+ohlc['time'] = ohlc['time'].apply(mpl_dates.date2num)
+ohlc = ohlc.astype(float)
+
+candlestick_ohlc(axs[0], ohlc.values, width=0.01, colorup='green', colordown='red', alpha=0.8)
+
 dates = frequency_result._data.items
 
 len_dates = len(dates)
@@ -67,13 +76,15 @@ for i in range(len_dates - 1):
     groups += " when `datetime` between \"{}\" and \"{}\"" \
               "    then {}".format(dt_init.isoformat(), dt_end.isoformat(), i)
 sql = "select " \
-        "case " \
-        "    {} " \
-        "else {} " \
-        "end as date_group, count(*) from tweets where lower(content) like lower('%%{}%%') " \
-        "and `datetime` BETWEEN \"{}\" and \"{}\" group by date_group ".format(groups, len_dates-1, query, since.isoformat().split('T')[0], until.isoformat().split('T')[0])
+      "case " \
+      "    {} " \
+      "else {} " \
+      "end as date_group, count(*) from tweets where lower(content) like lower('%%{}%%') " \
+      "and `datetime` BETWEEN \"{}\" and \"{}\" group by date_group ".format(groups, len_dates - 1, query,
+                                                                             since.isoformat().split('T')[0],
+                                                                             until.isoformat().split('T')[0])
 print('sql query mounted')
-
+print(format_sql(sql))
 print('fetching')
 rows = []
 with engine.connect() as con:
@@ -82,15 +93,14 @@ with engine.connect() as con:
         rows.append(row)
 
 print('fetched, mounting second chart')
-count = []
+rcount = []
 for i in range(len_dates):
-    try:
-        count.append(rows[i][1])
-    except:
-        count.append(None)
+    rcount.append(None)
+for i in range(len(rows)):
+    rcount[rows[i][0]] = rows[i][1]
 print('finishing')
 
-axs[1].plot(dates, count, 'r-')
+axs[1].plot(dates, rcount, 'r-')
 figure = plt.gcf()
 figure.set_size_inches(12, 10)
 filename = '{}_{}_{}_{}_{}'.format(
@@ -100,7 +110,7 @@ filename = '{}_{}_{}_{}_{}'.format(
     until.isoformat().split('T')[0],
     str_timeframe
 )
-fig.savefig(path_img + filename)  # save the figure to file
+fig.savefig(path_img + "\\" + filename)  # save the figure to file
 plt.xticks(rotation=90)
 plt.show()
 mt5.shutdown()
