@@ -1,17 +1,18 @@
 # Copyright 2021, MetaQuotes Ltd.
 # https://www.mql5.com
+import argparse
 from datetime import datetime
+
 import MetaTrader5 as mt5
+import matplotlib.dates as mpl_dates
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
+from mpl_finance import candlestick_ohlc
 from pandas.plotting import register_matplotlib_converters
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-from sql_formatter.core import format_sql
-import argparse
-import matplotlib.dates as mpl_dates
-from mpl_finance import candlestick_ohlc
+
+from databases import mysql, mongodb
 
 engine = create_engine("mysql+pymysql://root:@localhost/mt5_twitter?charset=utf8mb4")
 session = Session(bind=engine)
@@ -28,6 +29,7 @@ ap.add_argument("-s", "--since", required=True, help="since date")
 ap.add_argument("-u", "--until", required=True, help="until date")
 ap.add_argument("-f", "--frame", required=True, help="frame data from mt5 lib like TIMEFRAME_H1")
 ap.add_argument("-p", "--path", required=True, help="path to save generated image")
+ap.add_argument("-d", "--database", required=True, help="database to retrive data")
 args = vars(ap.parse_args())
 tick = args['tick']
 query = args['query']
@@ -38,6 +40,7 @@ timeframe = getattr(mt5, args['frame'])
 str_timeframe = args['frame'].split('_')[1]
 panda_frequency = str_timeframe[0]
 path_img = args['path']
+database = args['database']
 
 print('mt5 initializing')
 if not mt5.initialize():
@@ -67,40 +70,12 @@ candlestick_ohlc(axs[0], ohlc.values, width=0.01, colorup='green', colordown='re
 
 dates = frequency_result._data.items
 
-len_dates = len(dates)
-groups = ''
-print('mounting sql query')
-for i in range(len_dates - 1):
-    dt_init = datetime.combine(dates[i].date(), dates[i].time())
-    dt_end = datetime.combine(dates[i + 1].date(), dates[i + 1].time())
-    groups += " when `datetime` between \"{}\" and \"{}\"" \
-              "    then {}".format(dt_init.isoformat(), dt_end.isoformat(), i)
-sql = "select " \
-      "case " \
-      "    {} " \
-      "else {} " \
-      "end as date_group, count(*) from tweets where lower(content) like lower('%%{}%%') " \
-      "and `datetime` BETWEEN \"{}\" and \"{}\" group by date_group ".format(groups, len_dates - 1, query,
-                                                                             since.isoformat().split('T')[0],
-                                                                             until.isoformat().split('T')[0])
-print('sql query mounted')
-print(format_sql(sql))
-print('fetching')
-rows = []
-with engine.connect() as con:
-    rs = con.execute(format_sql(sql))
-    for row in rs:
-        rows.append(row)
+if database == 'mysql':
+    results = mysql.count_in_dates(query, since, until, dates)
+elif database == 'mongodb':
+    results = mongodb.count_in_dates(query, since, until, dates)
 
-print('fetched, mounting second chart')
-rcount = []
-for i in range(len_dates):
-    rcount.append(None)
-for i in range(len(rows)):
-    rcount[rows[i][0]] = rows[i][1]
-print('finishing')
-
-axs[1].plot(dates, rcount, 'r-')
+axs[1].plot(dates, results, 'r-')
 figure = plt.gcf()
 figure.set_size_inches(12, 10)
 filename = '{}_{}_{}_{}_{}'.format(

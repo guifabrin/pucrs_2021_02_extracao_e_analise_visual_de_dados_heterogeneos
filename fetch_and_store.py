@@ -1,8 +1,8 @@
 import argparse
-
-from store import mongodb, mysql
-from fetch.twitter import fetch
 from datetime import date, timedelta
+
+from databases import mongodb, mysql
+from fetch.twitter import fetch
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
@@ -19,7 +19,7 @@ if __name__ == '__main__':
 else:
     start_date = date(2021, 9, 1)
     end_date = date(2021, 9, 30)
-    store_method = mongodb.store #mysql.store
+    store_method = mongodb.store  # mysql.databases
 
     delta = end_date - start_date
     for i in range(delta.days + 1):
