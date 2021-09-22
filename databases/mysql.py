@@ -6,20 +6,22 @@ from sqlalchemy.orm import Session
 
 from models import Tweet
 
-engine = create_engine("mysql+pymysql://root:@localhost/mt5_twitter?charset=utf8mb4")
+from dotenv import dotenv_values
+config = dotenv_values(".env")
+
+engine = create_engine(config["MYSQL_URL"])
 
 
 def store(tweet):
     session = Session(bind=engine)
-    db_tweet = Tweet()
-    db_tweet.id = tweet.tweetID
-    db_tweet.user_id = tweet.user_id
-    db_tweet.content = tweet.content
-    db_tweet.datetime = tweet.date
-    db_tweet.favorite_count = tweet.favorite_count
-    db_tweet.retweet_count = tweet.retweet_count
-    session.add(db_tweet)
-    session.commit()
+    try:
+        if session.query(Tweet).filter(Tweet.id == tweet.id).count() == 0:
+            session.add(tweet)
+            session.commit()
+        return 1
+    except Exception as ex:
+        session.rollback()
+        return 0
 
 
 def count_in_dates(query, since, until, dates):
@@ -56,3 +58,12 @@ def count_in_dates(query, since, until, dates):
         results[rows[i][0]] = rows[i][1]
     print('finishing')
     return results
+
+
+def get_query_id(query):
+    if query == "petrobras":
+        return 0
+    if query == "brumadinho":
+        return 1
+    if query == "renner":
+        return 2

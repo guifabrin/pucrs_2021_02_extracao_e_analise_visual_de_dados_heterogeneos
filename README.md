@@ -18,7 +18,7 @@ dados.
 - --method [-m] onde deveria gravar: mongodb ou mysql
 
 ```
-python fetch_and_store.py -q petrobras -s "2021-01-01" -u "2021-12-31" -m mongodb
+python fetch_and_store.py -q petrobras -s "2021-01-01" -u "2021-12-31" -m mysql
 ```
 
 ### Plotagem de dados
@@ -38,7 +38,7 @@ python fetch_and_store.py -q petrobras -s "2021-01-01" -u "2021-12-31" -m mongod
 
 ```
 python plot.py -t PETR4 -c 10000000 -q petrobras -s "2019-01-01 00:00:00" -u "2021-08-31 23:59:59" -f TIMEFRAME_D1 -p "C:\Users\guilh\Goo
-gle Drive\Estudos\PPGCC\2021\02\Extração e Análise de Dados Heterogêneos\Programa" -d mongodb
+gle Drive\Estudos\PPGCC\2021\02\Extração e Análise de Dados Heterogêneos\Programa" -d mysql
 ```
 
 #### Resultado
