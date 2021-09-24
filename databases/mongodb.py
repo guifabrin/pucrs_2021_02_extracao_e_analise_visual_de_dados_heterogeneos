@@ -41,15 +41,9 @@ def count_in_dates(query, since, until, dates):
     for i in range(len_dates - 1):
         dt_init = datetime.combine(dates[i].date(), dates[i].time())
         dt_end = datetime.combine(dates[i + 1].date(), dates[i + 1].time())
-
-        size = len(
-            list(collection_currency.find({
-                "$and": [
-                    {"datetime": {"$gt": dt_init.timestamp(), "$lt": dt_end.timestamp()}},
-                    {"content": {"$regex": query}}
-                ]
-            })))
+        size = collection_currency.find({"d": {"$gt": dt_init.timestamp(), "$lt": dt_end.timestamp()}, "q": get_query_id(query)}).count()
         results[i] = size if size > 0 else None
+        print(i, 'of', len_dates, size)
     return results
 
 

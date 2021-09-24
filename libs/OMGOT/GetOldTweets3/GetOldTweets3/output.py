@@ -133,7 +133,7 @@ async def checkData(tweet, config, conn):
 
     if not tweet.datestamp:
         logme.critical(__name__ + ':checkData:hiddenTweetFound')
-        print("[x] Hidden tweet found, account suspended due to violation of TOS")
+        #print("[x] Hidden tweet found, account suspended due to violation of TOS")
         return
 
     if datecheck(tweet.datestamp + " " + tweet.timestamp, config):

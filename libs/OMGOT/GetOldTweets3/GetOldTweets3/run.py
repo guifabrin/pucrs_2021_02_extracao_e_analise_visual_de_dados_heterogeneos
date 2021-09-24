@@ -98,7 +98,7 @@ class Twint:
                         self.feed, self.init = feed.search_v2(response)
                     except NoMoreTweetsException as e:
                         logme.debug(__name__ + ':Twint:Feed:' + str(e))
-                        print(e, 'is it though? because sometimes twitter lie haha.')
+                        #print(e, 'is it though? because sometimes twitter lie haha.')
                 break
             except TimeoutError as e:
                 if self.config.Proxy_host.lower() == "tor":
