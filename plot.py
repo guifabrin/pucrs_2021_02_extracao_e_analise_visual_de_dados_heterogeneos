@@ -11,8 +11,9 @@ from mpl_finance import candlestick_ohlc
 from pandas.plotting import register_matplotlib_converters
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+import time
 
-from databases import mysql, mongodb
+from databases import mongodb
 
 engine = create_engine("mysql+pymysql://root:@localhost/mt5_twitter?charset=utf8mb4")
 session = Session(bind=engine)
@@ -30,6 +31,10 @@ ap.add_argument("-u", "--until", required=True, help="until date")
 ap.add_argument("-f", "--frame", required=True, help="frame data from mt5 lib like TIMEFRAME_H1")
 ap.add_argument("-p", "--path", required=True, help="path to save generated image")
 ap.add_argument("-d", "--database", required=True, help="database to retrive data")
+
+ap.add_argument("-m", "--favorite", required=False, help="favorite multiplier")
+ap.add_argument("-r", "--retweets", required=False, help="retweets multiplier")
+
 args = vars(ap.parse_args())
 tick = args['tick']
 query = args['query']
@@ -41,6 +46,11 @@ str_timeframe = args['frame'].split('_')[1]
 panda_frequency = str_timeframe[0]
 path_img = args['path']
 database = args['database']
+favorite_multiplier = None
+retweets_multiplier = None
+if args['favorite']:
+    favorite_multiplier = int(args['favorite'])
+    retweets_multiplier = int(args['retweets'])
 
 print('mt5 initializing')
 if not mt5.initialize():
@@ -50,12 +60,14 @@ ticks = mt5.copy_rates_range(tick, timeframe, since, until)
 ticks_frame = pd.DataFrame(ticks)
 ticks_frame['time'] = pd.to_datetime(ticks_frame['time'], unit='s')
 fig, axs = plt.subplots(2, sharex='all')
-fig.suptitle('{} x twitter count about "{}" from {} to {} in timeframe {}'.format(
+fig.suptitle('{} x twitter count about "{}" from {} to {} in timeframe {} with importance {}vs{}'.format(
     tick,
     query,
     since.isoformat().split('T')[0],
     until.isoformat().split('T')[0],
-    str_timeframe
+    str_timeframe,
+    favorite_multiplier if favorite_multiplier else '0',
+    retweets_multiplier if retweets_multiplier else '0'
 ))
 print('copy done, adding dates not found with frequency {}'.format(panda_frequency))
 s = pd.Series(ticks['close'], ticks_frame['time'])
@@ -70,20 +82,20 @@ candlestick_ohlc(axs[0], ohlc.values, width=0.01, colorup='green', colordown='re
 
 dates = frequency_result._data.items
 
-if database == 'mysql':
-    results = mysql.count_in_dates(query, since, until, dates)
-elif database == 'mongodb':
-    results = mongodb.count_in_dates(query, since, until, dates)
+results = mongodb.count_in_dates(query, since, until, dates, favorite_multiplier, retweets_multiplier)
 
 axs[1].plot(dates, results, 'r-')
 figure = plt.gcf()
 figure.set_size_inches(12, 10)
-filename = '{}_{}_{}_{}_{}'.format(
+filename = '{}_{}_{}_{}_{}_{}_{}_{}'.format(
     tick,
     query,
     since.isoformat().split('T')[0],
     until.isoformat().split('T')[0],
-    str_timeframe
+    str_timeframe,
+    int(time.time()),
+    favorite_multiplier if favorite_multiplier else '0',
+    retweets_multiplier if retweets_multiplier else '0'
 )
 fig.savefig(path_img + "\\" + filename)  # save the figure to file
 plt.xticks(rotation=90)

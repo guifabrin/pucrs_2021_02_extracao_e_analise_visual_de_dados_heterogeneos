@@ -12,7 +12,7 @@ from libs import twint
 from libs.OMGOT.GetOldTweets3.cli import main
 from libs.snscrape.modules.twitter import TwitterSearchScraper
 
-from databases import mongodb, mysql
+from databases import mongodb
 
 config = dotenv_values(".env")
 

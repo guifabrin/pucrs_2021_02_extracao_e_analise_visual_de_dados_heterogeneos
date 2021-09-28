@@ -4,6 +4,7 @@ from datetime import datetime
 from sqlalchemy.ext.declarative import DeclarativeMeta
 
 from dotenv import dotenv_values
+
 config = dotenv_values(".env")
 
 client = pymongo.MongoClient(config['MONGO_DB_URL'])
@@ -33,7 +34,7 @@ def store(tweet):
     collection_currency.insert_one(json.loads(json.dumps(tweet, cls=AlchemyEncoder)))
 
 
-def count_in_dates(query, since, until, dates):
+def count_in_dates(query, since, until, dates, favorite_multiplier=None, retweets_multiplier=None):
     results = []
     len_dates = len(dates)
     for i in range(len_dates):
@@ -41,8 +42,17 @@ def count_in_dates(query, since, until, dates):
     for i in range(len_dates - 1):
         dt_init = datetime.combine(dates[i].date(), dates[i].time())
         dt_end = datetime.combine(dates[i + 1].date(), dates[i + 1].time())
-        size = collection_currency.find({"d": {"$gt": dt_init.timestamp(), "$lt": dt_end.timestamp()}, "q": get_query_id(query)}).count()
-        results[i] = size if size > 0 else None
+        if favorite_multiplier:
+            size = 0
+            for item in collection_currency.find(
+                    {"d": {"$gt": dt_init.timestamp(), "$lt": dt_end.timestamp()}, "q": get_query_id(query)}):
+                size += item['f'] * favorite_multiplier + item['r'] * retweets_multiplier
+
+            results[i] = size if size > 0 else None
+        else:
+            size = collection_currency.find(
+                {"d": {"$gt": dt_init.timestamp(), "$lt": dt_end.timestamp()}, "q": get_query_id(query)}).count()
+            results[i] = size if size > 0 else None
         print(i, 'of', len_dates, size)
     return results
 
