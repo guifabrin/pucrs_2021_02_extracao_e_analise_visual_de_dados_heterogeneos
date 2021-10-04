@@ -2,6 +2,7 @@ import json
 import pymongo
 from datetime import datetime
 from sqlalchemy.ext.declarative import DeclarativeMeta
+from unidecode import unidecode
 
 from dotenv import dotenv_values
 
@@ -48,19 +49,22 @@ def count_in_dates(query, since, until, dates, favorite_multiplier=None, retweet
                     {"d": {"$gt": dt_init.timestamp(), "$lt": dt_end.timestamp()}, "q": get_query_id(query)}):
                 size += item['f'] * favorite_multiplier + item['r'] * retweets_multiplier
 
-            results[i] = size if size > 0 else None
+            results[i] = size
         else:
             size = collection_currency.find(
                 {"d": {"$gt": dt_init.timestamp(), "$lt": dt_end.timestamp()}, "q": get_query_id(query)}).count()
-            results[i] = size if size > 0 else None
+            results[i] = size
         print(i, 'of', len_dates, size)
     return results
 
 
 def get_query_id(query):
-    if query == "petrobras":
+    q = unidecode(query.lower())
+    if "petrobras" in q:
         return 0
-    if query == "brumadinho":
+    if "brumadinho" in q:
         return 1
-    if query == "renner":
+    if "renner" in q:
         return 2
+    if "pandemia" in q:
+        return 3
