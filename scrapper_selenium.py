@@ -11,17 +11,16 @@ from datetime import date, timedelta
 imported = 0
 inserted = 0
 futures = []
-arr = []
+fifo_tweets = []
 
 
-def date_range(start_date, finish_date):
-    for n in range(int((finish_date - start_date).days)):
-        yield start_date + timedelta(n)
+def date_range(date_a, date_b):
+    for n in range(int((date_b - date_a).days)):
+        yield date_a + timedelta(n)
 
 
-def navigate(date_init, date_end, query):
-    global imported
-    global arr
+def navigate(init, end, search):
+    global imported, fifo_tweets
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     options.add_argument('window-size=1920x1080')
@@ -29,8 +28,8 @@ def navigate(date_init, date_end, query):
     options.add_argument("--disable-gpu")
     driver = webdriver.Chrome(executable_path="chromedriver.exe", options=options)
     driver.get(
-        "https://twitter.com/search?q=until%3A" + date_end.strftime(
-            "%Y-%m-%d") + "%20since%3A" + date_init.strftime("%Y-%m-%d") + "%20" + query + "&src=typed_query&f=live")
+        "https://twitter.com/search?q=until%3A" + end.strftime(
+            "%Y-%m-%d") + "%20since%3A" + init.strftime("%Y-%m-%d") + "%20" + search + "&src=typed_query&f=live")
 
     driver.execute_script("""
               (function(xhr) {
@@ -98,11 +97,11 @@ def navigate(date_init, date_end, query):
         driver.execute_script('document.data = []')
         for item in data:
             for str_id, obj in item['globalObjects']['tweets'].items():
-                id = mongodb.get_query_id(obj['full_text'])
+                mongo_db_id = mongodb.get_query_id(obj['full_text'])
                 if id is not None:
-                    arr.append({
+                    fifo_tweets.append({
                         "i": str_id,
-                        "q": id,
+                        "q": mongo_db_id,
                         "d": datetime.datetime.strptime(obj['created_at'], '%a %b %d %H:%M:%S +0000 %Y').timestamp(),
                         "f": int(obj['favorite_count']),
                         "r": int(obj['reply_count'])
@@ -126,7 +125,8 @@ def update_progress(progress):
     block = int(round(bar_length * progress))
     total_progress = progress * 100
     total_progress = total_progress if total_progress > 0 else 1
-    text = "\rPercent: [{0}] {1}% {2} .. {3}".format("#" * block + "-" * (bar_length - block), total_progress, imported, inserted)
+    text = "\rPercent: [{0}] {1}% {2} .. {3}".format("#" * block + "-" * (bar_length - block), total_progress, imported,
+                                                     inserted)
     sys.stdout.write(text)
     sys.stdout.flush()
 
@@ -141,24 +141,25 @@ def print_metrics():
 
 
 def insert_data():
-    global inserted, arr
+    global inserted, fifo_tweets
     while True:
         try:
-            if len(arr) > 0:
-                item = arr.pop()
+            if len(fifo_tweets) > 0:
+                item = fifo_tweets.pop()
                 mongodb.store(item)
                 inserted += 1
         except:
             pass
 
 
-threading.Thread(target=print_metrics, args=()).start()
-threading.Thread(target=insert_data, args=()).start()
+if __name__ == '__main__':
+    threading.Thread(target=print_metrics, args=()).start()
+    threading.Thread(target=insert_data, args=()).start()
 
-with ThreadPoolExecutor(max_workers=5) as executor:
-    for query in ['brumadinho', 'mariana', 'petrobras', 'pandemia']:
-        start_date = date(2010, 1, 1)
-        finish_date = date(2021, 12, 31)
-        for date_init in date_range(start_date, finish_date):
-            date_end = date_init + timedelta(days=1)
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        for query in ['brumadinho', 'mariana', 'petrobras', 'pandemia']:
+            start_date = date(2010, 1, 1)
+            finish_date = date(2021, 12, 31)
+            for date_init in date_range(start_date, finish_date):
+                date_end = date_init + timedelta(days=1)
             futures.append(executor.submit(navigate, date_init, date_end, query))

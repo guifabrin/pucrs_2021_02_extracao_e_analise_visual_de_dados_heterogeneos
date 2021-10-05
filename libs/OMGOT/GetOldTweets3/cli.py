@@ -9,7 +9,6 @@ Licensed under MIT License
 Copyright (c) 2018 The Twint Project  
 '''
 import sys
-import os
 import argparse
 
 # from . import run
@@ -17,6 +16,7 @@ import argparse
 # from . import storage
 
 from libs.OMGOT.GetOldTweets3.GetOldTweets3 import *
+from libs.twint import storage
 
 
 def error(_error, message):

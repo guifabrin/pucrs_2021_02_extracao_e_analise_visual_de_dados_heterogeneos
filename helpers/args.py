@@ -2,7 +2,6 @@ import argparse
 import os
 from datetime import datetime
 import MetaTrader5 as mt5
-import time
 
 from dotenv import dotenv_values
 
@@ -19,6 +18,8 @@ class Arg:
         self.since = None
         self.until = None
         self.show = False
+        self.tick = None
+        self.query = None
         if 'PATH_TO_SAVE' in config:
             self.path_img = config['PATH_TO_SAVE']
 
