@@ -11,7 +11,7 @@ from datetime import date, timedelta
 imported = 0
 inserted = 0
 futures = []
-data = []
+arr = []
 
 
 def date_range(start_date, finish_date):
@@ -21,7 +21,7 @@ def date_range(start_date, finish_date):
 
 def navigate(date_init, date_end, query):
     global imported
-    global data
+    global arr
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     options.add_argument('window-size=1920x1080')
@@ -100,7 +100,7 @@ def navigate(date_init, date_end, query):
             for str_id, obj in item['globalObjects']['tweets'].items():
                 id = mongodb.get_query_id(obj['full_text'])
                 if id is not None:
-                    data.append({
+                    arr.append({
                         "i": str_id,
                         "q": id,
                         "d": datetime.datetime.strptime(obj['created_at'], '%a %b %d %H:%M:%S +0000 %Y').timestamp(),
@@ -141,11 +141,15 @@ def print_metrics():
 
 
 def insert_data():
-    global inserted
+    global inserted, arr
     while True:
-        if len(data) > 0:
-            mongodb.store(data.pop())
-            inserted += 1
+        try:
+            if len(arr) > 0:
+                item = arr.pop()
+                mongodb.store(item)
+                inserted += 1
+        except:
+            pass
 
 
 threading.Thread(target=print_metrics, args=()).start()
