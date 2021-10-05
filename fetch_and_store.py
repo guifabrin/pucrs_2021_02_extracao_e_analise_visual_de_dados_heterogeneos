@@ -4,8 +4,6 @@ import threading
 import time
 from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime, timedelta
-
-import tweepy
 from dotenv import dotenv_values
 
 from libs import twint
@@ -122,35 +120,6 @@ def worker_snscrape(query, date_init, date_end, method):
     update_workers('snscrape', -1)
 
 
-def worker_tweepy(query, date_init, date_end, method):
-    update_workers('tweepy', 1)
-    try:
-        auth = tweepy.OAuthHandler(config['TWITTER_CONSUMER_KEY'], config['TWITTER_CONSUMER_SECRET'])
-        auth.set_access_token(config['TWITTER_KEY'], config['TWITTER_SECRET'])
-
-        api = tweepy.API(auth)
-        query_id = method.get_query_id(query)
-        for tweet in tweepy.Cursor(api.search,
-                                   q=query,
-                                   count=100,
-                                   result_type="recent",
-                                   since=date_init.split('T')[0],
-                                   until=date_end.split('T')[0],
-                                   include_entities=True,
-                                   lang="pt").items():
-            method.store({
-                'i': tweet.id,
-                'q': query_id,
-                'd': tweet.created_at.timestamp(),
-                'f': tweet.favorite_count,
-                'r': tweet.retweet_count
-            })
-            update_metrics('tweepy')
-    except:
-        pass
-    update_workers('tweepy', -1)
-
-
 class Options:
     pass
 
@@ -257,42 +226,34 @@ if __name__ == '__main__':
     delta = end_date - start_date
     method = eval(args['method'])
     total_threads = int(args['threads'])
-    max_workers = int(total_threads / 4)
+    max_workers = int(total_threads / 3)
+    days = 10
 
 
     def thread_pool_get_old():
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            for i in range(delta.days + 1):
+            for i in range(delta.days + days):
                 date_init = (start_date + timedelta(days=i)).isoformat()
-                date_end = (start_date + timedelta(days=i + 1)).isoformat()
+                date_end = (start_date + timedelta(days=i + days)).isoformat()
                 futures.append(executor.submit(worker_get_old, args['query'], date_init, date_end, method))
-
-
-    def thread_pool_tweepy():
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            for i in range(delta.days + 1):
-                date_init = (start_date + timedelta(days=i)).isoformat()
-                date_end = (start_date + timedelta(days=i + 1)).isoformat()
-                futures.append(executor.submit(worker_tweepy, args['query'], date_init, date_end, method))
 
 
     def thread_pool_snscrape():
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            for i in range(delta.days + 1):
+            for i in range(delta.days + days):
                 date_init = (start_date + timedelta(days=i)).isoformat()
-                date_end = (start_date + timedelta(days=i + 1)).isoformat()
+                date_end = (start_date + timedelta(days=i + days)).isoformat()
                 futures.append(executor.submit(worker_snscrape, args['query'], date_init, date_end, method))
 
 
     def thread_pool_twint():
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            for i in range(delta.days + 1):
+            for i in range(delta.days + days):
                 date_init = (start_date + timedelta(days=i)).isoformat()
-                date_end = (start_date + timedelta(days=i + 1)).isoformat()
+                date_end = (start_date + timedelta(days=i + days)).isoformat()
                 futures.append(executor.submit(worker_twint, args['query'], date_init, date_end, method))
 
 
     threading.Thread(target=thread_pool_get_old, args=()).start()
-    threading.Thread(target=thread_pool_tweepy, args=()).start()
     threading.Thread(target=thread_pool_snscrape, args=()).start()
     threading.Thread(target=thread_pool_twint, args=()).start()

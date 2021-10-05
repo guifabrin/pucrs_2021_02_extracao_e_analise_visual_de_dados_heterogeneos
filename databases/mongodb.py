@@ -68,3 +68,5 @@ def get_query_id(query):
         return 2
     if "pandemia" in q:
         return 3
+    if "mariana" in q:
+        return 4
