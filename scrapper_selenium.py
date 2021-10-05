@@ -9,7 +9,9 @@ from databases import mongodb
 from datetime import date, timedelta
 
 imported = 0
+inserted = 0
 futures = []
+data = []
 
 
 def date_range(start_date, finish_date):
@@ -19,6 +21,7 @@ def date_range(start_date, finish_date):
 
 def navigate(date_init, date_end, query):
     global imported
+    global data
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     options.add_argument('window-size=1920x1080')
@@ -88,29 +91,29 @@ def navigate(date_init, date_end, query):
               }, 1000)
               """)
     time.sleep(5)
-    with open("data.csv", "a") as data_file:
-        while True:
-            data = driver.execute_script('return document.data')
-            if not data:
-                break
-            driver.execute_script('document.data = []')
-            for item in data:
-                for str_id, obj in item['globalObjects']['tweets'].items():
-                    id = mongodb.get_query_id(obj['full_text'])
-                    if id is not None:
-                        data_file.write("{},{},{},{},{}\n".format(str_id, id,
-                                                                  datetime.datetime.strptime(obj['created_at'],
-                                                                                             '%a %b %d %H:%M:%S +0000 %Y').timestamp(),
-                                                                  int(obj['favorite_count']),
-                                                                  int(obj['reply_count'])))
-                        imported = imported + 1
-            time.sleep(5)
+    while True:
+        data = driver.execute_script('return document.data')
+        if not data:
+            break
+        driver.execute_script('document.data = []')
+        for item in data:
+            for str_id, obj in item['globalObjects']['tweets'].items():
+                id = mongodb.get_query_id(obj['full_text'])
+                if id is not None:
+                    data.append({
+                        "i": str_id,
+                        "q": id,
+                        "d": datetime.datetime.strptime(obj['created_at'], '%a %b %d %H:%M:%S +0000 %Y').timestamp(),
+                        "f": int(obj['favorite_count']),
+                        "r": int(obj['reply_count'])
+                    })
+                    imported = imported + 1
+        time.sleep(5)
     driver.quit()
 
 
 def update_progress(progress):
-    global imported
-    global futures
+    global imported, futures, inserted
     bar_length = 30
     if isinstance(progress, int):
         progress = float(progress)
@@ -123,7 +126,7 @@ def update_progress(progress):
     block = int(round(bar_length * progress))
     total_progress = progress * 100
     total_progress = total_progress if total_progress > 0 else 1
-    text = "\rPercent: [{0}] {1}% {2}".format("#" * block + "-" * (bar_length - block), total_progress, imported)
+    text = "\rPercent: [{0}] {1}% {2} .. {3}".format("#" * block + "-" * (bar_length - block), total_progress, imported, inserted)
     sys.stdout.write(text)
     sys.stdout.flush()
 
@@ -137,7 +140,16 @@ def print_metrics():
         time.sleep(0.3)
 
 
+def insert_data():
+    global inserted
+    while True:
+        if len(data) > 0:
+            mongodb.store(data.pop())
+            inserted += 1
+
+
 threading.Thread(target=print_metrics, args=()).start()
+threading.Thread(target=insert_data, args=()).start()
 
 with ThreadPoolExecutor(max_workers=5) as executor:
     for query in ['brumadinho', 'mariana', 'petrobras', 'pandemia']:
