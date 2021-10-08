@@ -8,7 +8,7 @@ from dotenv import dotenv_values
 
 config = dotenv_values(".env")
 
-client = pymongo.MongoClient(config['MONGO_DB_URL'])
+client = pymongo.MongoClient(config['MONGO_DB_URL'], tlsAllowInvalidCertificates=True)
 db = client[config['MONGO_DB_CLIENT']]
 collection_currency = db[config['MONGO_DB_COLLECTION']]
 

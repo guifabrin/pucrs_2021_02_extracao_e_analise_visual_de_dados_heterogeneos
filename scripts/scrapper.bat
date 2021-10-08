@@ -1,7 +1,5 @@
 cd ..
 
-python.exe .\scrapper_selenium.py -q brumadinho -s 2019-01-01 -u 2019-01-31
-
 python.exe .\scrapper_selenium.py -q mariana -s 2015-10-01 -u 2015-11-30
 
 python.exe .\scrapper_selenium.py -q petrobras -s 2014-03-17
@@ -152,4 +150,3 @@ python.exe .\scrapper_selenium.py -q petrobras -s 2018-09-25
 python.exe .\scrapper_selenium.py -q petrobras -s 2018-09-26
 python.exe .\scrapper_selenium.py -q petrobras -s 2018-11-23
 python.exe .\scrapper_selenium.py -q petrobras -s 2018-11-29
-python.exe .\scrapper_selenium.py -q petrobras -s 2018-12-05

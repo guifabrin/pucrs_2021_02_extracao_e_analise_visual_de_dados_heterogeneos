@@ -49,6 +49,7 @@ def update_progress(progress):
     sys.stdout.flush()
     return progress
 
+
 def print_metrics():
     while True:
         total = len(futures)
@@ -76,7 +77,7 @@ def update_workers(method, value):
     workers[method] += value
 
 
-def twint_callback(tweet, query_id, method):
+def twint_callback(tweet, query_id):
     mongodb.store({
         'i': tweet['id_str'],
         'q': query_id,
@@ -87,7 +88,7 @@ def twint_callback(tweet, query_id, method):
     update_metrics('twint')
 
 
-def worker_twint(query, date_init, date_end, method):
+def worker_twint(query, date_init, date_end):
     update_workers('twint', 1)
     try:
         c = twint.Config()
@@ -96,17 +97,17 @@ def worker_twint(query, date_init, date_end, method):
         c.Search = [query]
         c.Limit = 100000
         c.Hide_output = True
-        query_id = method.get_query_id(query)
-        twint.run.Search(c, lambda tweet: twint_callback(tweet, query_id, method))
+        query_id = mongodb.get_query_id(query)
+        twint.run.Search(c, lambda tweet: twint_callback(tweet, query_id))
     except:
         pass
     update_workers('twint', -1)
 
 
-def worker_snscrape(query, date_init, date_end, method):
+def worker_snscrape(query, date_init, date_end):
     update_workers('snscrape', 1)
     try:
-        query_id = method.get_query_id(query)
+        query_id = mongodb.get_query_id(query)
         for i, tweet in enumerate(TwitterSearchScraper(
                 query + ' since:' + date_init + ' until:' + date_end).get_items()):
             mongodb.store({
@@ -126,7 +127,7 @@ class Options:
     pass
 
 
-def worker_get_old(query, date_init, date_end, method):
+def worker_get_old(query, date_init, date_end):
     update_workers('get_old', 1)
     try:
         options = Options()
@@ -196,7 +197,7 @@ def worker_get_old(query, date_init, date_end, method):
         options.favorites = None
         options.following = None
         options.followers = None
-        query_id = method.get_query_id(query)
+        query_id = mongodb.get_query_id(query)
 
         def process(tweet):
             mongodb.store({
@@ -220,7 +221,6 @@ if __name__ == '__main__':
     ap.add_argument("-q", "--query", required=True, help="query")
     ap.add_argument("-s", "--since", required=True, help="since")
     ap.add_argument("-u", "--until", required=False, help="until")
-    ap.add_argument("-m", "--method", required=True, help="method")
     ap.add_argument("-t", "--threads", required=True, help="threads")
     args = vars(ap.parse_args())
     start_date = datetime.fromisoformat(args['since'])
@@ -229,7 +229,6 @@ if __name__ == '__main__':
     else:
         end_date = start_date + timedelta(days=1)
     delta = end_date - start_date
-    method = eval(args['method'])
     total_threads = int(args['threads'])
     max_workers = int(total_threads / 3)
     days = 1
@@ -238,10 +237,10 @@ if __name__ == '__main__':
         for i in range(delta.days + days):
             date_init = (start_date + timedelta(days=i)).isoformat()
             date_end = (start_date + timedelta(days=i + days)).isoformat()
-            futures.append(executor.submit(worker_twint, args['query'], date_init, date_end, method))
+            futures.append(executor.submit(worker_twint, args['query'], date_init, date_end))
             date_init = (start_date + timedelta(days=i)).isoformat()
             date_end = (start_date + timedelta(days=i + days)).isoformat()
-            futures.append(executor.submit(worker_snscrape, args['query'], date_init, date_end, method))
+            futures.append(executor.submit(worker_snscrape, args['query'], date_init, date_end))
             date_init = (start_date + timedelta(days=i)).isoformat()
             date_end = (start_date + timedelta(days=i + days)).isoformat()
-            futures.append(executor.submit(worker_get_old, args['query'], date_init, date_end, method))
+            futures.append(executor.submit(worker_get_old, args['query'], date_init, date_end))

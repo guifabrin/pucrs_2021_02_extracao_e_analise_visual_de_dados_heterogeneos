@@ -113,16 +113,17 @@ def insert_data():
     global inserted, fifo_tweets
     while True:
         try:
+            print("Inserted versus imported", inserted, imported)
             result = fifo_tweets
             fifo_tweets = []
             if len(result) > 0:
                 mongodb.store_all(result)
                 inserted += len(result)
-                print("Inserted", inserted)
-        except:
-            pass
+        except Exception as ex:
+            print("Error", ex)
         time.sleep(1)
         if finished:
+            print("Finished")
             break
 
 
