@@ -48,15 +48,18 @@ def update_progress(progress):
                                                                                workers)
     sys.stdout.write(text)
     sys.stdout.flush()
-
+    return progress
 
 def print_metrics():
     while True:
         total = len(futures)
         complete = len(list(filter(lambda b: b, map(lambda f: f.done(), futures))))
+        result = 0
         if total > 0:
-            update_progress(complete / total)
+            result = update_progress(complete / total)
         time.sleep(0.3)
+        if result == 1:
+            break
 
 
 threading.Thread(target=print_metrics, args=()).start()
@@ -217,43 +220,29 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument("-q", "--query", required=True, help="query")
     ap.add_argument("-s", "--since", required=True, help="since")
-    ap.add_argument("-u", "--until", required=True, help="until")
+    ap.add_argument("-u", "--until", required=False, help="until")
     ap.add_argument("-m", "--method", required=True, help="method")
     ap.add_argument("-t", "--threads", required=True, help="threads")
     args = vars(ap.parse_args())
     start_date = datetime.fromisoformat(args['since'])
-    end_date = datetime.fromisoformat(args['until'])
+    if args['until']:
+        end_date = datetime.fromisoformat(args['until'])
+    else:
+        end_date = start_date + timedelta(days=1)
     delta = end_date - start_date
     method = eval(args['method'])
     total_threads = int(args['threads'])
     max_workers = int(total_threads / 3)
-    days = 10
+    days = 1
 
-
-    def thread_pool_get_old():
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            for i in range(delta.days + days):
-                date_init = (start_date + timedelta(days=i)).isoformat()
-                date_end = (start_date + timedelta(days=i + days)).isoformat()
-                futures.append(executor.submit(worker_get_old, args['query'], date_init, date_end, method))
-
-
-    def thread_pool_snscrape():
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            for i in range(delta.days + days):
-                date_init = (start_date + timedelta(days=i)).isoformat()
-                date_end = (start_date + timedelta(days=i + days)).isoformat()
-                futures.append(executor.submit(worker_snscrape, args['query'], date_init, date_end, method))
-
-
-    def thread_pool_twint():
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            for i in range(delta.days + days):
-                date_init = (start_date + timedelta(days=i)).isoformat()
-                date_end = (start_date + timedelta(days=i + days)).isoformat()
-                futures.append(executor.submit(worker_twint, args['query'], date_init, date_end, method))
-
-
-    threading.Thread(target=thread_pool_get_old, args=()).start()
-    threading.Thread(target=thread_pool_snscrape, args=()).start()
-    threading.Thread(target=thread_pool_twint, args=()).start()
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        for i in range(delta.days + days):
+            date_init = (start_date + timedelta(days=i)).isoformat()
+            date_end = (start_date + timedelta(days=i + days)).isoformat()
+            futures.append(executor.submit(worker_twint, args['query'], date_init, date_end, method))
+            date_init = (start_date + timedelta(days=i)).isoformat()
+            date_end = (start_date + timedelta(days=i + days)).isoformat()
+            futures.append(executor.submit(worker_snscrape, args['query'], date_init, date_end, method))
+            date_init = (start_date + timedelta(days=i)).isoformat()
+            date_end = (start_date + timedelta(days=i + days)).isoformat()
+            futures.append(executor.submit(worker_get_old, args['query'], date_init, date_end, method))

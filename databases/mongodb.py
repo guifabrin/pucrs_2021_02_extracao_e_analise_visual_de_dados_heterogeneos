@@ -35,7 +35,11 @@ def store(tweet):
     collection_currency.insert_one(json.loads(json.dumps(tweet, cls=AlchemyEncoder)))
 
 
-def count_in_dates(query, since, until, dates, favorite_multiplier=None, retweets_multiplier=None):
+def store_all(tweets):
+    collection_currency.insert_many(json.loads(json.dumps(tweets, cls=AlchemyEncoder)))
+
+
+def count_in_dates(query, since, until, dates):
     results = []
     len_dates = len(dates)
     for i in range(len_dates):
@@ -43,18 +47,9 @@ def count_in_dates(query, since, until, dates, favorite_multiplier=None, retweet
     for i in range(len_dates - 1):
         dt_init = datetime.combine(dates[i].date(), dates[i].time())
         dt_end = datetime.combine(dates[i + 1].date(), dates[i + 1].time())
-        if favorite_multiplier:
-            size = 0
-            for item in collection_currency.find(
-                    {"d": {"$gt": dt_init.timestamp(), "$lt": dt_end.timestamp()}, "q": get_query_id(query)}):
-                size += item['f'] * favorite_multiplier + item['r'] * retweets_multiplier
-
-            results[i] = size
-        else:
-            size = collection_currency.find(
-                {"d": {"$gt": dt_init.timestamp(), "$lt": dt_end.timestamp()}, "q": get_query_id(query)}).count()
-            results[i] = size
-        print(i, 'of', len_dates, size)
+        results[i] = collection_currency.find(
+            {"d": {"$gt": dt_init.timestamp(), "$lt": dt_end.timestamp()}, "q": get_query_id(query)}).count()
+        print(i, 'of', len_dates, results[i])
     return results
 
 

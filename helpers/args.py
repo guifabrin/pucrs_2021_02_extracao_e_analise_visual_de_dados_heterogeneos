@@ -1,4 +1,5 @@
 import argparse
+import json
 import os
 from datetime import datetime
 import MetaTrader5 as mt5
@@ -12,14 +13,13 @@ class Arg:
     def __init__(self):
         self.count = 10000000
         self.frame = None
-        self.favorite_multiplier = None
-        self.retweets_multiplier = None
         self.database = 'mongodb'
         self.since = None
         self.until = None
         self.show = False
         self.tick = None
         self.query = None
+        self.lines = {}
         if 'PATH_TO_SAVE' in config:
             self.path_img = config['PATH_TO_SAVE']
 
@@ -54,24 +54,20 @@ class Arg:
             self.query,
             self.str_since,
             self.str_until,
-            self.str_timeframe,
-            self.favorite_multiplier,
-            self.retweets_multiplier
+            self.str_timeframe
         )
 
     def filename(self, extra=''):
-        directory = '{}\\{}_{}\\{}_{}\\{}\\{}_{}\\'.format(
+        directory = '{}\\{}_{}\\{}_{}\\{}\\'.format(
             self.path_img,
             self.tick,
             self.query,
             self.str_since,
             self.str_until,
-            self.str_timeframe,
-            self.favorite_multiplier,
-            self.retweets_multiplier)
+            self.str_timeframe)
         if not os.path.exists(directory):
             os.makedirs(directory)
-        return '{}image{}'.format(
+        return '{}plot{}'.format(
             directory,
             extra
         )
@@ -92,6 +88,7 @@ def parse():
     ap.add_argument("-r", "--retweets", required=False, help="retweets multiplier")
     ap.add_argument("-p", "--path", required=False, help="path to save generated image")
     ap.add_argument("-x", "--show", required=False, help="show image")
+    ap.add_argument("-l", "--lines", required=False, help="vertical lines")
 
     args = vars(ap.parse_args())
     arg = Arg()
@@ -100,12 +97,6 @@ def parse():
     arg.since = datetime.strptime(args['since'], '%Y-%m-%d %H:%M:%S')
     arg.until = datetime.strptime(args['until'], '%Y-%m-%d %H:%M:%S')
     arg.frame = args['frame']
-
-    if args['favorite']:
-        arg.favorite_multiplier = int(args['favorite'])
-
-    if args['retweets']:
-        arg.retweets_multiplier = int(args['retweets'])
 
     if args['count']:
         arg.count = args['count']
@@ -118,5 +109,8 @@ def parse():
 
     if args['show']:
         arg.show = bool(args['show'])
+
+    if args['lines']:
+        arg.lines = json.loads(args['lines'])
 
     return arg

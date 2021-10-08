@@ -1,17 +1,19 @@
+import argparse
 import datetime
 import sys
 import threading
 import time
-from concurrent.futures.thread import ThreadPoolExecutor
 
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
 from databases import mongodb
 from datetime import date, timedelta
 
 imported = 0
 inserted = 0
-futures = []
 fifo_tweets = []
+finished = False
 
 
 def date_range(date_a, date_b):
@@ -21,11 +23,8 @@ def date_range(date_a, date_b):
 
 def navigate(init, end, search):
     global imported, fifo_tweets
-    options = webdriver.ChromeOptions()
-    options.add_argument('headless')
-    options.add_argument('window-size=1920x1080')
-    options.add_argument("disable-gpu")
-    options.add_argument("--disable-gpu")
+    options = Options()
+    options.add_argument('--disable-blink-features=AutomationControlled')
     driver = webdriver.Chrome(executable_path="chromedriver.exe", options=options)
     driver.get(
         "https://twitter.com/search?q=until%3A" + end.strftime(
@@ -111,55 +110,52 @@ def navigate(init, end, search):
     driver.quit()
 
 
-def update_progress(progress):
-    global imported, futures, inserted
-    bar_length = 30
-    if isinstance(progress, int):
-        progress = float(progress)
-    if not isinstance(progress, float):
-        progress = 0
-    if progress < 0:
-        progress = 0
-    if progress >= 1:
-        progress = 1
-    block = int(round(bar_length * progress))
-    total_progress = progress * 100
-    total_progress = total_progress if total_progress > 0 else 1
-    text = "\rPercent: [{0}] {1}% {2} .. {3}".format("#" * block + "-" * (bar_length - block), total_progress, imported,
-                                                     inserted)
-    sys.stdout.write(text)
-    sys.stdout.flush()
-
-
-def print_metrics():
-    while True:
-        total = len(futures)
-        complete = len(list(filter(lambda b: b, map(lambda f: f.done(), futures))))
-        if total > 0:
-            update_progress(complete / total)
-        time.sleep(0.3)
-
-
 def insert_data():
     global inserted, fifo_tweets
     while True:
         try:
-            if len(fifo_tweets) > 0:
-                item = fifo_tweets.pop()
-                mongodb.store(item)
-                inserted += 1
+            result = fifo_tweets
+            fifo_tweets = []
+            if len(result) > 0:
+                mongodb.store_all(result)
+                inserted += len(result)
+                print("Inserted", inserted)
         except:
             pass
+        time.sleep(1)
+        if finished:
+            break
 
 
-if __name__ == '__main__':
-    threading.Thread(target=print_metrics, args=()).start()
-    threading.Thread(target=insert_data, args=()).start()
+threading.Thread(target=insert_data, args=()).start()
 
-    with ThreadPoolExecutor(max_workers=5) as executor:
-        for query in ['brumadinho', 'mariana', 'petrobras', 'pandemia']:
-            start_date = date(2010, 1, 1)
-            finish_date = date(2021, 12, 31)
-            for date_init in date_range(start_date, finish_date):
-                date_end = date_init + timedelta(days=1)
-            futures.append(executor.submit(navigate, date_init, date_end, query))
+ap = argparse.ArgumentParser()
+ap.add_argument("-q", "--query", required=True, help="query to search")
+ap.add_argument("-s", "--since", required=True, help="since date")
+ap.add_argument("-u", "--until", required=False, help="until date")
+
+args = vars(ap.parse_args())
+print("\n\nInit")
+start_date = datetime.datetime.strptime(args['since'], '%Y-%m-%d').date()
+delta = datetime.timedelta(days=1)
+if args['until']:
+    finish_date = datetime.datetime.strptime(args['until'], '%Y-%m-%d').date()
+else:
+    finish_date = start_date + delta
+log_filename = "logs\\scrapper_" + args['query'] + ".txt"
+lines = open(log_filename, "r").read().split('\n')
+while start_date <= finish_date:
+    date_init = start_date
+    start_date += delta
+    inserted = 0
+    while True:
+        if date_init.isoformat() in lines:
+            print('Skipping ' + date_init.isoformat())
+            break
+        navigate(date_init, start_date, args['query'])
+        if inserted == 0:
+            log_file = open(log_filename, "a")
+            log_file.write(date_init.isoformat() + "\n")
+            log_file.close()
+            break
+finished = True
