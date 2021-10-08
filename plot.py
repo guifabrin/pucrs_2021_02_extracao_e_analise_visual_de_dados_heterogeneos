@@ -12,6 +12,8 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import matplotlib.dates as mpl_dates
 
+random_byte = lambda: random.randint(0, 255)
+
 register_matplotlib_converters()
 args = parse()
 print('mt5 initializing')
@@ -38,10 +40,10 @@ fign.add_trace(go.Candlestick(x=ticks_frame['time'],
                               name="Stock price " + args.tick + " with timeframe " + args.str_timeframe),
                secondary_y=False)
 results = mongodb.count_in_dates(args.query, args.since, args.until, dates)
-fign.add_trace(go.Scatter(x=dates, y=results, name="Tweet count with query '" + args.query + "'"), secondary_y=True)
+color = '#%02X%02X%02X' % (random_byte(), random_byte(), random_byte())
+fign.add_trace(go.Scatter(x=dates, y=results, name="Tweet count with query '" + args.query + "'", line=dict(color=color, width=1)), secondary_y=True)
 #
 for key, value in args.lines.items():
-    random_byte = lambda: random.randint(0, 255)
     color = '#%02X%02X%02X' % (random_byte(), random_byte(), random_byte())
     date_time_event = datetime.strptime(key, '%Y-%m-%d %H:%M:%S')
     fign.add_trace(go.Scatter(x=[date_time_event, date_time_event], y=[0, max(filter(lambda f:f, results))], name=value,

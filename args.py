@@ -88,6 +88,7 @@ def parse():
     ap.add_argument("-p", "--path", required=False, help="path to save generated image")
     ap.add_argument("-x", "--show", required=False, help="show image")
     ap.add_argument("-l", "--lines", required=False, help="vertical lines")
+    ap.add_argument("-j", "--json", required=False, help="vertical lines json file")
 
     args = vars(ap.parse_args())
     arg = Arg()
@@ -108,5 +109,9 @@ def parse():
 
     if args['lines']:
         arg.lines = json.loads(args['lines'])
+
+    if args['json']:
+        f = open(args['json'], )
+        arg.lines = json.load(f)
 
     return arg
