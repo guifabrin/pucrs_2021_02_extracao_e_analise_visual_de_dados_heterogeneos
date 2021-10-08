@@ -4,4 +4,7 @@ venv/**/*
 *.pyc
 chromedriver.exe
 data.csv
-logs/**/*
+**/*.spec
+*.toc
+build/**/*
+__pycache__

@@ -1,155 +1,155 @@
 cd ..
 
-python.exe .\fetch_and_store.py -q brumadinho -s 2019-01-01 -u 2019-01-31 -t 3 -m mongodb
+python.exe .\fetch_and_store.py -q brumadinho -s 2019-01-01 -u 2019-01-31 -t 3
 
-python.exe .\fetch_and_store.py -q mariana -s 2015-10-01 -u 2015-11-30 -t 3 -m mongodb
+python.exe .\fetch_and_store.py -q mariana -s 2015-10-01 -u 2015-11-30 -t 3
 
-python.exe .\fetch_and_store.py -q petrobras -s 2014-03-17 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-03-20 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-04-05 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-04-09 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-04-11 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-04-23 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-04-25 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-05-05 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-05-14 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-05-19 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-05-28 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-06-11 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-07-01 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-07-03 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-08-22 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-09-24 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-09-06 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-09-24 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-10-01 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-10-08 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-10-09 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-10-22 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-11-03 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-11-14 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-11-15 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-11-16 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-11-18 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-12-02 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-12-08 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-12-12 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2014-12-18 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-01-07 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-01-14 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-01-28 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-02-04 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-02-05 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-02-05 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-02-26 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-03-03 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-03-06 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-03-16 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-03-27 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-04-10 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-04-15 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-04-18 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-04-22 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-05-09 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-05-21 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-05-26 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-06-19 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-07-02 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-07-14 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-07-16 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-07-19 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-07-20 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-07-24 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-07-27 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-07-28 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-07-30 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-07-30 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-08-03 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-08-04 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-08-05 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-08-13 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-08-17 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-08-20 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-09-04 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-09-11 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-09-15 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-09-21 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-09-22 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-10-16 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-10-29 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-11-16 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-11-16 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-11-24 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-11-25 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2015-12-15 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-01-18 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-01-27 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-02-19 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-02-22 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-03-03 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-03-04 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-03-08 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-03-21 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-03-22 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-03-23 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-04-01 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-04-12 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-04-28 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-05-08 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-05-23 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-05-24 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-06-23 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-07-01 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-07-04 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-07-06 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-07-07 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-08-02 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-08-10 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-09-22 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-09-26 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-10-19 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-11-10 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-11-17 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2016-12-16 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-01-19 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-01-30 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-02-02 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-02-10 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-02-14 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-02-23 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-03-14 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-03-21 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-03-28 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-03-30 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-04-11 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-04-12 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-05-04 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-05-17 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-05-18 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-05-26 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-06-13 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-07-03 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-07-12 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-07-15 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-07-18 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-07-27 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-08-18 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-08-18 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-08-23 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-09-05 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-10-20 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-11-21 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2017-11-23 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2018-01-24 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2018-02-23 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2018-03-09 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2018-03-23 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2018-05-08 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2018-06-21 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2018-09-04 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2018-09-11 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2018-09-25 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2018-09-26 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2018-11-23 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2018-11-29 -t 3 -m mongodb
-python.exe .\fetch_and_store.py -q petrobras -s 2018-12-05 -t 3 -m mongodb
+python.exe .\fetch_and_store.py -q petrobras -s 2014-03-17 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-03-20 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-04-05 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-04-09 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-04-11 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-04-23 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-04-25 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-05-05 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-05-14 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-05-19 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-05-28 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-06-11 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-07-01 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-07-03 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-08-22 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-09-24 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-09-06 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-09-24 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-10-01 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-10-08 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-10-09 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-10-22 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-11-03 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-11-14 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-11-15 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-11-16 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-11-18 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-12-02 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-12-08 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-12-12 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2014-12-18 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-01-07 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-01-14 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-01-28 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-02-04 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-02-05 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-02-05 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-02-26 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-03-03 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-03-06 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-03-16 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-03-27 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-04-10 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-04-15 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-04-18 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-04-22 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-05-09 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-05-21 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-05-26 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-06-19 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-07-02 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-07-14 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-07-16 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-07-19 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-07-20 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-07-24 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-07-27 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-07-28 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-07-30 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-07-30 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-08-03 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-08-04 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-08-05 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-08-13 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-08-17 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-08-20 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-09-04 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-09-11 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-09-15 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-09-21 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-09-22 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-10-16 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-10-29 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-11-16 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-11-16 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-11-24 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-11-25 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2015-12-15 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-01-18 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-01-27 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-02-19 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-02-22 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-03-03 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-03-04 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-03-08 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-03-21 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-03-22 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-03-23 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-04-01 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-04-12 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-04-28 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-05-08 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-05-23 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-05-24 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-06-23 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-07-01 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-07-04 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-07-06 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-07-07 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-08-02 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-08-10 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-09-22 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-09-26 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-10-19 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-11-10 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-11-17 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2016-12-16 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-01-19 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-01-30 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-02-02 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-02-10 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-02-14 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-02-23 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-03-14 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-03-21 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-03-28 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-03-30 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-04-11 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-04-12 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-05-04 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-05-17 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-05-18 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-05-26 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-06-13 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-07-03 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-07-12 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-07-15 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-07-18 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-07-27 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-08-18 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-08-18 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-08-23 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-09-05 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-10-20 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-11-21 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2017-11-23 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2018-01-24 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2018-02-23 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2018-03-09 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2018-03-23 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2018-05-08 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2018-06-21 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2018-09-04 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2018-09-11 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2018-09-25 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2018-09-26 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2018-11-23 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2018-11-29 -t 3
+python.exe .\fetch_and_store.py -q petrobras -s 2018-12-05 -t 3

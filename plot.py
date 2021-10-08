@@ -7,7 +7,7 @@ import MetaTrader5 as mt5
 import pandas as pd
 from pandas.plotting import register_matplotlib_converters
 import mongodb
-from helpers.args import parse
+from args import parse
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import matplotlib.dates as mpl_dates

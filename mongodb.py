@@ -1,7 +1,8 @@
 import json
 import pymongo
 from datetime import datetime
-from sqlalchemy.ext.declarative import DeclarativeMeta
+
+from sqlalchemy.orm import DeclarativeMeta
 from unidecode import unidecode
 
 from dotenv import dotenv_values

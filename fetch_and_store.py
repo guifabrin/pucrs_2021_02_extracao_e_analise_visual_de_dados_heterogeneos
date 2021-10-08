@@ -7,9 +7,7 @@ from datetime import datetime, timedelta
 from dotenv import dotenv_values
 
 import mongodb
-from libs import twint
-from libs.OMGOT.GetOldTweets3.cli import main
-from libs.snscrape.modules.twitter import TwitterSearchScraper
+from snscrape.twitter import TwitterSearchScraper
 
 config = dotenv_values(".env")
 
@@ -87,23 +85,6 @@ def twint_callback(tweet, query_id):
     })
     update_metrics('twint')
 
-
-def worker_twint(query, date_init, date_end):
-    update_workers('twint', 1)
-    try:
-        c = twint.Config()
-        c.Since = ' '.join(date_init.split('T'))
-        c.Until = ' '.join(date_end.split('T'))
-        c.Search = [query]
-        c.Limit = 100000
-        c.Hide_output = True
-        query_id = mongodb.get_query_id(query)
-        twint.run.Search(c, lambda tweet: twint_callback(tweet, query_id))
-    except:
-        pass
-    update_workers('twint', -1)
-
-
 def worker_snscrape(query, date_init, date_end):
     update_workers('snscrape', 1)
     try:
@@ -118,102 +99,13 @@ def worker_snscrape(query, date_init, date_end):
                 'r': tweet.retweet_count
             })
             update_metrics('snscrape')
-    except:
-        pass
+    except Exception as ex:
+        print(ex)
     update_workers('snscrape', -1)
 
 
 class Options:
     pass
-
-
-def worker_get_old(query, date_init, date_end):
-    update_workers('get_old', 1)
-    try:
-        options = Options()
-        options.search = query
-        options.since = date_init.split('T')[0]
-        options.until = date_end.split('T')[0]
-        options.username = None
-        options.userlist = None
-        options.members_list = None
-        options.all = None
-        options.output = None
-        options.csv = None
-        options.json = None
-        options.backoff_exponent = 3.0
-        options.min_wait_time = 15
-        options.pandas_clean = None
-        options.userid = None
-        options.geo = None
-        options.location = None
-        options.near = None
-        options.lang = None
-        options.elasticsearch = None
-        options.year = None
-        options.email = None
-        options.phone = None
-        options.verified = None
-        options.hashtags = None
-        options.cashtags = None
-        options.limit = None
-        options.count = None
-        options.stats = None
-        options.database = None
-        options.to = None
-        options.essid = None
-        options.format = None
-        options.user_full = None
-        options.profile_full = None
-        options.pandas_type = None
-        options.index_tweets = None
-        options.index_follow = None
-        options.index_users = None
-        options.debug = None
-        options.resume = None
-        options.images = None
-        options.videos = None
-        options.media = None
-        options.replies = None
-        options.proxy_host = None
-        options.proxy_port = None
-        options.proxy_type = None
-        options.tor_control_port = None
-        options.tor_control_password = None
-        options.retweets = None
-        options.custom_query = None
-        options.popular_tweets = None
-        options.skip_certs = None
-        options.hide_output = True
-        options.native_retweets = None
-        options.min_likes = None
-        options.min_retweets = None
-        options.min_replies = None
-        options.links = None
-        options.source = None
-        options.filter_retweets = None
-        options.translate = None
-        options.translate_dest = None
-        options.favorites = None
-        options.following = None
-        options.followers = None
-        query_id = mongodb.get_query_id(query)
-
-        def process(tweet):
-            mongodb.store({
-                'i': tweet.id_str,
-                'q': query_id,
-                'd': datetime.fromisoformat(
-                    tweet.datetime.split(' ')[0] + "T" + tweet.datetime.split(' ')[1]).timestamp(),
-                'f': tweet.likes_count,
-                'r': tweet.retweets_count
-            })
-            update_metrics('get_old')
-
-        main(options, process)
-    except:
-        pass
-    update_workers('get_old', -1)
 
 
 if __name__ == '__main__':
@@ -230,17 +122,11 @@ if __name__ == '__main__':
         end_date = start_date + timedelta(days=1)
     delta = end_date - start_date
     total_threads = int(args['threads'])
-    max_workers = int(total_threads / 3)
+    max_workers = int(total_threads)
     days = 1
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         for i in range(delta.days + days):
             date_init = (start_date + timedelta(days=i)).isoformat()
             date_end = (start_date + timedelta(days=i + days)).isoformat()
-            futures.append(executor.submit(worker_twint, args['query'], date_init, date_end))
-            date_init = (start_date + timedelta(days=i)).isoformat()
-            date_end = (start_date + timedelta(days=i + days)).isoformat()
             futures.append(executor.submit(worker_snscrape, args['query'], date_init, date_end))
-            date_init = (start_date + timedelta(days=i)).isoformat()
-            date_end = (start_date + timedelta(days=i + days)).isoformat()
-            futures.append(executor.submit(worker_get_old, args['query'], date_init, date_end))
