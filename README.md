@@ -1,42 +1,87 @@
-# PUCRS 2021/02 Extração e análise visual de dados heterogêneos
+# PUCRS 2021/02 Extraction and visual analysis of heterogeneous data
 
-## Objetivo
+# Goal
 
-Este projeto visa criar uma base de dados e explorar a possibilidade de dados do Twitter influenciar em algum ponto o
-mercado de ativos brasileiro.
+This project aims to create a database and explore the possibility of data from Twitter influencing at some point the
+Brazilian asset market.
 
-Utiliza um web crawler para aquisição de tweets e a biblioteca MT5 da plataforma MetaTrader para análise gráfica dos
-dados.
+It uses a web crawler to acquire tweets and the MT5 library of the MetaTrader platform for graphical analysis of the
+Dice.
 
-## Como executar
-
-### Aquisição de dados
-
-- --query [-q] o que deve haver no Tweet
-- --since [-s] desde quando deve ser executada a pesquisa
-- --until [-u] até quando deve ser executada a pesquisa
-- --method [-m] onde deveria gravar: mongodb ou mysql
-
-```
-python fetch_and_store.py -q petrobras -s "2021-01-01" -u "2021-12-31" -m mongodb
+# Env configuration
+- Copy .env.example to .env
+```dotenv
+MONGO_DB_URL=mongodb+srv://root:password@localhost/database?retryWrites=true&w=majority
+MONGO_DB_CLIENT=client
+MONGO_DB_COLLECTION=collection
+PATH_TO_SAVE=C:\
 ```
 
-### Plotagem de dados
+# Data acquisition
+## Scrapper with external libs
 
-- --tick[-t] ativo da bolsa de valores
-- --count[-c] quantidade de dados da bolsa de valores
-- --query[-q] o que deve haver no Tweet para ser plotado
-- --since[-s] desde quando deve ser executada a pesquisa
-- --until[-u] até quando deve ser executada a pesquisa
-- --frame[-f] qual o frame de tempo deve ser considerado:
-    - verificar timeframes da biblioteca do mt5
-- --path[-p]
-- --database [-d] onde deveria pegar os dados: mongodb ou mysql
+### Required 
+- --query [-q] what should be in the Tweet
+- --since [-s] since when should the search be run
 
-#### Exemplo
+### Non-required 
+- --until [-u] how long to run the search (or one day added automatically)
 
-```
-python plot.py -t PETR4 -c 10000000 -q petrobras -s "2019-01-01 00:00:00" -u "2021-08-31 23:59:59" -f TIMEFRAME_D1 -p "C:\" -d mongodb
+### Examples
+- Run search from 2021-01-01 until 2021-01-02
+```bash
+python fetch_and_store.py -q petrobras -s "2021-01-01"
 ```
 
-#### Resultados
+- Run search from 2021-01-01 until 2021-12-31
+```bash
+python fetch_and_store.py -q petrobras -s "2021-01-01" -u "2021-12-31"
+```
+
+## Scrapper with selenium and chrome
+### Required 
+- --query [-q] what should be in the Tweet
+- --since [-s] since when should the search be run
+
+### Non-required 
+- --until [-u] how long to run the search (or one day added automatically)
+
+### Examples
+- Run search from 2021-01-01 until 2021-01-02
+```bash
+python scrapper_selenium.py -q petrobras -s "2021-01-01"
+```
+
+- Run search from 2021-01-01 until 2021-12-31
+```bash
+python scrapper_selenium.py -q petrobras -s "2021-01-01" -u "2021-12-31"
+```
+
+# Data Plot
+## Required
+- --tick [-t] stock exchange asset
+- --query [-q] what must be in the Tweet to be plotted
+- --since [-s] since when should the search run
+- --frame [-f] which time frame should be considered:
+    - check mt5 library timeframes
+
+## Non required
+- --until [-u] how long to run the search
+- --count [-c] amount of stock exchange data
+- --path [-p] path to save html file (can be setted on .env)
+- --lines [-l] vertical lines to plot in chart, format json where key is date and value is the line title
+
+### Examples
+
+- Plot PETR4 with petrobras query search from 2019-01-01 00:00:00 until 2021-08-31 23:59:59 using timeframe D1
+```
+python plot.py -t PETR4 -q petrobras -s "2019-01-01 00:00:00" -u "2021-08-31 23:59:59" -f TIMEFRAME_D1
+```
+
+- Plot VALE3 with brumadinho query search from 2019-01-01 00:00:00 until 2019-01-31 23:59:59 using timeframe D1 and add line into 2019-01-25 13:37:00
+```
+python plot.py -t VALE3 -q brumadinho -s "2019-01-01 00:00:00" -u "2021-08-31 23:59:59" -f TIMEFRAME_D1 -l "{\"2019-01-25 13:37:00\":\"Dam break\"}"
+```
+
+## Results
+Access [Generated results](https://guifabrin.github.io/pucrs_2021_02_extracao_e_analise_visual_de_datos_heterogeneos/)

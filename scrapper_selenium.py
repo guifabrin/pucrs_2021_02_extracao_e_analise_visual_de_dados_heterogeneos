@@ -1,14 +1,13 @@
 import argparse
 import datetime
-import sys
 import threading
 import time
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-from databases import mongodb
-from datetime import date, timedelta
+import mongodb
+from datetime import timedelta
 
 imported = 0
 inserted = 0

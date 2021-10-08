@@ -82,7 +82,6 @@ def parse():
     ap.add_argument("-u", "--until", required=True, help="until date")
     ap.add_argument("-f", "--frame", required=True, help="frame data from mt5 lib like TIMEFRAME_H1")
 
-    ap.add_argument("-d", "--database", required=False, help="database to retrive data")
     ap.add_argument("-c", "--count", required=False, help="max ticks count")
     ap.add_argument("-m", "--favorite", required=False, help="favorite multiplier")
     ap.add_argument("-r", "--retweets", required=False, help="retweets multiplier")
@@ -103,9 +102,6 @@ def parse():
 
     if args['path']:
         arg.path_img = args['path']
-
-    if args['database']:
-        arg.database = args['database']
 
     if args['show']:
         arg.show = bool(args['show'])

@@ -6,11 +6,10 @@ from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from dotenv import dotenv_values
 
+import mongodb
 from libs import twint
 from libs.OMGOT.GetOldTweets3.cli import main
 from libs.snscrape.modules.twitter import TwitterSearchScraper
-
-from databases import mongodb
 
 config = dotenv_values(".env")
 
@@ -78,7 +77,7 @@ def update_workers(method, value):
 
 
 def twint_callback(tweet, query_id, method):
-    method.store({
+    mongodb.store({
         'i': tweet['id_str'],
         'q': query_id,
         'd': datetime.strptime(tweet['created_at'], '%a %b %d %H:%M:%S +0000 %Y').timestamp(),
@@ -110,7 +109,7 @@ def worker_snscrape(query, date_init, date_end, method):
         query_id = method.get_query_id(query)
         for i, tweet in enumerate(TwitterSearchScraper(
                 query + ' since:' + date_init + ' until:' + date_end).get_items()):
-            method.store({
+            mongodb.store({
                 'i': tweet.tweetID,
                 'q': query_id,
                 'd': tweet.date.timestamp(),
@@ -200,7 +199,7 @@ def worker_get_old(query, date_init, date_end, method):
         query_id = method.get_query_id(query)
 
         def process(tweet):
-            method.store({
+            mongodb.store({
                 'i': tweet.id_str,
                 'q': query_id,
                 'd': datetime.fromisoformat(
