@@ -84,4 +84,4 @@ python plot.py -t VALE3 -q brumadinho -s "2019-01-01 00:00:00" -u "2021-08-31 23
 ```
 
 ## Results
-Access [Generated results](https://guifabrin.github.io/pucrs_2021_02_extracao_e_analise_visual_de_datos_heterogeneos/)
+Access [Generated results](https://guifabrin.github.io/pucrs_2021_02_extracao_e_analise_visual_de_dados_heterogeneos/)
