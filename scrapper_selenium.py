@@ -153,14 +153,12 @@ while start_date <= finish_date:
     date_init = start_date
     start_date += delta
     inserted = 0
-    while True:
-        if date_init.isoformat() in lines:
-            print('Skipping ' + date_init.isoformat())
-            break
-        navigate(date_init, start_date, args['query'])
-        if inserted == 0:
-            log_file = open(log_filename, "a")
-            log_file.write(date_init.isoformat() + "\n")
-            log_file.close()
-            break
+    if date_init.isoformat() in lines:
+        print('Skipping ' + date_init.isoformat())
+        continue
+    navigate(date_init, start_date, args['query'])
+    if inserted == 0:
+        log_file = open(log_filename, "a")
+        log_file.write(date_init.isoformat() + "\n")
+        log_file.close()
 finished = True
