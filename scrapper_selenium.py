@@ -91,9 +91,9 @@ def navigate(init, end, search):
     time.sleep(5)
     while True:
         data = driver.execute_script('return document.data')
+        driver.execute_script('document.data = []')
         if not data:
             break
-        driver.execute_script('document.data = []')
         for item in data:
             for str_id, obj in item['globalObjects']['tweets'].items():
                 mongo_db_id = mongodb.get_query_id(obj['full_text'])
@@ -145,7 +145,7 @@ else:
     finish_date = start_date + delta
 log_filename = "logs\\scrapper_" + args['query'] + ".txt"
 if not os.path.exists(log_filename):
-    log_file = open(log_filename, "a")
+    log_file = open(log_filename, "a+")
     log_file.write("")
     log_file.close()
 lines = open(log_filename, "r").read().split('\n')
@@ -158,7 +158,7 @@ while start_date <= finish_date:
         continue
     navigate(date_init, start_date, args['query'])
     if inserted == 0:
-        log_file = open(log_filename, "a")
+        log_file = open(log_filename, "a+")
         log_file.write(date_init.isoformat() + "\n")
         log_file.close()
 finished = True

@@ -1,4 +1,5 @@
 import argparse
+import os
 import sys
 import threading
 import time
@@ -85,13 +86,25 @@ def twint_callback(tweet, query_id):
     })
     update_metrics('twint')
 
+
 def worker_snscrape(query, date_init, date_end):
     update_workers('snscrape', 1)
     try:
+        log_filename = "logs\\fetcher_" + query + ".txt"
+        if not os.path.exists(log_filename):
+            log_file = open(log_filename, "a+")
+            log_file.write("")
+            log_file.close()
+        lines = open(log_filename, "r").read().split('\n')
+        if date_init in lines:
+            print('Skipping ' + date_init)
+            update_workers('snscrape', -1)
+            return
+        total = 0
         query_id = mongodb.get_query_id(query)
         for i, tweet in enumerate(TwitterSearchScraper(
                 query + ' since:' + date_init + ' until:' + date_end).get_items()):
-            mongodb.store({
+            total += mongodb.store({
                 'i': tweet.tweetID,
                 'q': query_id,
                 'd': tweet.date.timestamp(),
@@ -99,6 +112,10 @@ def worker_snscrape(query, date_init, date_end):
                 'r': tweet.retweet_count
             })
             update_metrics('snscrape')
+            if total == 0:
+                log_file = open(log_filename, "a+")
+                log_file.write(date_init+"\n")
+                log_file.close()
     except Exception as ex:
         print(ex)
     update_workers('snscrape', -1)
@@ -121,11 +138,9 @@ if __name__ == '__main__':
     else:
         end_date = start_date + timedelta(days=1)
     delta = end_date - start_date
-    total_threads = int(args['threads'])
-    max_workers = int(total_threads)
     days = 1
 
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+    with ThreadPoolExecutor(max_workers=int(args['threads'])) as executor:
         for i in range(delta.days + days):
             date_init = (start_date + timedelta(days=i)).isoformat()
             date_end = (start_date + timedelta(days=i + days)).isoformat()

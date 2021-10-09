@@ -32,8 +32,9 @@ class AlchemyEncoder(json.JSONEncoder):
 
 def store(tweet):
     if collection_currency.find_one({"i": tweet['i']}):
-        return
+        return 0
     collection_currency.insert_one(json.loads(json.dumps(tweet, cls=AlchemyEncoder)))
+    return 1
 
 
 def store_all(tweets):
