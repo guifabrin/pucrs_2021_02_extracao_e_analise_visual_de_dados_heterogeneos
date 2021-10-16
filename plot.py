@@ -37,19 +37,74 @@ fign.add_trace(go.Candlestick(x=ticks_frame['time'],
                               high=ohlc['high'],
                               low=ohlc['low'],
                               close=ohlc['close'],
-                              name="Stock price " + args.tick + " with timeframe " + args.str_timeframe),
-               secondary_y=False)
-results = mongodb.count_in_dates(args.query, args.since, args.until, dates)
+                              name="Stock price " + args.tick + " with timeframe " + args.str_timeframe))
+results = mongodb.count_in_dates(args.query, args.since, args.until, dates, args.importances)
 color = '#%02X%02X%02X' % (random_byte(), random_byte(), random_byte())
-fign.add_trace(go.Scatter(x=dates, y=results, name="Tweet count with query '" + args.query + "'", line=dict(color=color, width=1)), secondary_y=True)
-#
+fign.add_trace(go.Scatter(x=dates, y=results[0], name="Quantitative", line=dict(color=color, width=1), yaxis="y2"))
+
+colors = [color]
+texts = ["Quantitative"]
+
+imp=1
+for importance in args.importances:
+    color = '#%02X%02X%02X' % (random_byte(), random_byte(), random_byte())
+    colors.append(color)
+    text = "IC(f,r)="+importance
+    texts.append(text)
+    fign.add_trace(go.Scatter(x=dates, y=results[imp], name=text, line=dict(color=color, width=1), yaxis="y"+str(imp+2)))
+    imp += 1
+
+
 for key, value in args.lines.items():
     color = '#%02X%02X%02X' % (random_byte(), random_byte(), random_byte())
     date_time_event = datetime.strptime(key, '%Y-%m-%d %H:%M:%S')
-    fign.add_trace(go.Scatter(x=[date_time_event, date_time_event], y=[0, max(filter(lambda f:f, results))], name=value,
-                              line=dict(color=color, width=1, dash='dash')), secondary_y=True)
+    fign.add_trace(go.Scatter(x=[date_time_event, date_time_event], y=[0, 1], name=value,
+                              line=dict(color=color, width=1, dash='dash'), yaxis="y"+str(imp+2)))
 fign.update_layout(
     title_text="Quantitative comparative into tweet count using query '" + args.query + "' and stock price " + args.tick + " and timeframe " + args.str_timeframe)
+
+multiplier = 0.08
+fign.update_layout(
+    xaxis=dict(
+        domain=[multiplier*4, 1]
+    ),
+    yaxis2=dict(
+        title=texts[0],
+        anchor="free",
+        side="left",
+        color=colors[0],
+        position=0,
+        overlaying="y",
+    ),
+    yaxis3=dict(
+        title=texts[1],
+        anchor="free",
+        side="left",
+        color=colors[1],
+        position=multiplier,
+        overlaying="y",
+    ),
+    yaxis4=dict(
+        title=texts[2],
+        anchor="free",
+        side="left",
+        color=colors[2],
+        position=multiplier*2,
+        overlaying="y",
+    ),
+    yaxis5=dict(
+        title=texts[3],
+        anchor="free",
+        side="left",
+        color=colors[3],
+        position=multiplier*3,
+        overlaying="y",
+    ),
+    yaxis6=dict(
+        visible= False,
+        overlaying="y",
+    ),
+)
 fign.write_html(args.filename() + ".html")
 if args.show:
     fign.show()

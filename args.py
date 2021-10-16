@@ -3,6 +3,7 @@ import json
 import os
 from datetime import datetime
 import MetaTrader5 as mt5
+import re
 
 from dotenv import dotenv_values
 
@@ -89,6 +90,7 @@ def parse():
     ap.add_argument("-x", "--show", required=False, help="show image")
     ap.add_argument("-l", "--lines", required=False, help="vertical lines")
     ap.add_argument("-j", "--json", required=False, help="vertical lines json file")
+    ap.add_argument("-i", "--importances", required=False, help="importance calc where {f} is favorite and {t} is retweet")
 
     args = vars(ap.parse_args())
     arg = Arg()
@@ -113,5 +115,8 @@ def parse():
     if args['json']:
         f = open(args['json'], )
         arg.lines = json.load(f)
+
+    if args['importances']:
+        arg.importances = args['importances'].split(';')
 
     return arg

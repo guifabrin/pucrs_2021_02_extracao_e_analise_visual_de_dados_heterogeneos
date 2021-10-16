@@ -41,17 +41,24 @@ def store_all(tweets):
     collection_currency.insert_many(json.loads(json.dumps(tweets, cls=AlchemyEncoder)))
 
 
-def count_in_dates(query, since, until, dates):
+def count_in_dates(query, since, until, dates, importances=None):
     results = []
     len_dates = len(dates)
-    for i in range(len_dates):
-        results.append(None)
+    for i in range(len(importances) + 1):
+        results.append([])
+        for j in range(len_dates):
+            results[i].append(0)
     for i in range(len_dates - 1):
         dt_init = datetime.combine(dates[i].date(), dates[i].time())
         dt_end = datetime.combine(dates[i + 1].date(), dates[i + 1].time())
-        results[i] = collection_currency.find(
-            {"d": {"$gt": dt_init.timestamp(), "$lt": dt_end.timestamp()}, "q": get_query_id(query)}).count()
-        print(i, 'of', len_dates, results[i])
+        data = collection_currency.find(
+            {"d": {"$gt": dt_init.timestamp(), "$lt": dt_end.timestamp()}, "q": get_query_id(query)})
+        results[0][i] = data.count()
+        for item in data:
+            imp = 1
+            for importance in importances:
+                results[imp][i] += eval(importance.replace('{f}', str(item['f'])).replace('{r}', str(item['r'])))
+                imp += 1
     return results
 
 
