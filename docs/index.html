@@ -14,7 +14,7 @@
         integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css"
         href="https://unpkg.com/js-year-calendar@latest/dist/js-year-calendar.min.css"/>
-  <link rel="stylesheet" href="https://rafaelthca.github.io/aimaraJS/css/Aimara.css">
+  <link rel="stylesheet" href="./aimarajs/css/Aimara.css">
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
@@ -49,7 +49,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.min.js"
         integrity="sha384-PsUw7Xwds7x08Ew3exXhqzbhuEYmA2xnwc8BuD6SEr+UmEHlX8/MCltYEodzWA4u"
         crossorigin="anonymous"></script>
-<script src="https://rafaelthca.github.io/aimaraJS/lib/Aimara.js"></script>
+<script src="./aimarajs/lib/Aimara.js"></script>
 <script>
   const iframe = document.querySelector('#my_frame')
   let minDate = Infinity
@@ -125,9 +125,9 @@
           for (const item of e.events){
             if (item.key.indexOf(tick) >- 1){
               const [, query] = item.key.split('_')
-              const query_node = node.createChildNode(query + ' ' + item.date.split('_').join(' until '), false, 'images/folder.png');
+              const query_node = node.createChildNode(query + ' ' + item.date.split('_').join(' until '), false, 'aimarajs/images/folder.png');
               for (const frame of item.frames){
-                const frame_node = query_node.createChildNode(frame, false, 'images/monitor.png');
+                const frame_node = query_node.createChildNode(frame, false, 'aimarajs/images/monitor.png');
                 refs.push({
                   id: '#ul_'+frame_node.id,
                   url: item.key+'/'+item.date+'/'+frame+'/plot.html'
