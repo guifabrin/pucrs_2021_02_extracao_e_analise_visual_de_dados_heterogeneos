@@ -1,5 +1,6 @@
 # Copyright 2021, MetaQuotes Ltd.
 # https://www.mql5.com
+import os
 import random
 from datetime import datetime
 
@@ -16,6 +17,9 @@ random_byte = lambda: random.randint(0, 255)
 
 register_matplotlib_converters()
 args = parse()
+if os.path.exists(args.filename() + ".html"):
+    print('Already plotted')
+    exit(1)
 print('mt5 initializing')
 if not mt5.initialize():
     mt5.shutdown()
@@ -58,7 +62,8 @@ for importance in args.importances:
 for key, value in args.lines.items():
     color = '#%02X%02X%02X' % (random_byte(), random_byte(), random_byte())
     date_time_event = datetime.strptime(key, '%Y-%m-%d %H:%M:%S')
-    fign.add_trace(go.Scatter(x=[date_time_event, date_time_event], y=[0, 1], name=value,
+    if args.since <= date_time_event <= args.until:
+        fign.add_trace(go.Scatter(x=[date_time_event, date_time_event], y=[0, 1], name=value,
                               line=dict(color=color, width=1, dash='dash'), yaxis="y"+str(imp+2)))
 fign.update_layout(
     title_text="Quantitative comparative into tweet count using query '" + args.query + "' and stock price " + args.tick + " and timeframe " + args.str_timeframe)
