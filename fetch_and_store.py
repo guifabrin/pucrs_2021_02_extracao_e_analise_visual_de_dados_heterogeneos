@@ -13,37 +13,30 @@ from snscrape.twitter import TwitterSearchScraper
 config = dotenv_values(".env")
 
 metrics = {}
+metrics2 = {}
 workers = {}
 start = time.time()
 futures = []
 
 
 def update_progress(progress):
-    bar_length = 30  # Modify this to change the length of the progress bar
-    status = ""
+    bar_length = 10
     if isinstance(progress, int):
         progress = float(progress)
     if not isinstance(progress, float):
         progress = 0
-        status = "error: progress var must be float\r\n"
     if progress < 0:
         progress = 0
-        status = "Halt...\r\n"
     if progress >= 1:
         progress = 1
-        status = "Done...\r\n"
     block = int(round(bar_length * progress))
-    end = time.time()
-    total = end - start
     total_progress = progress * 100
     total_progress = total_progress if total_progress > 0 else 1
-    perspective = total * 100 / total_progress
-    total = timedelta(seconds=total)
-    perspective = timedelta(seconds=perspective)
-    text = "\rPercent: [{0}] {1}% {2} {3} {4}; Totals:{5}; Threads:{6}".format("#" * block + "-" * (bar_length - block),
-                                                                               total_progress,
-                                                                               status, total, perspective, metrics,
-                                                                               workers)
+    text = "\r[{}] {:.2f}%, M:{}; MA:{}; W: {}".format("#" * block + "-" * (bar_length - block),
+                                                       total_progress,
+                                                       metrics,
+                                                       metrics2,
+                                                       workers)
     sys.stdout.write(text)
     sys.stdout.flush()
     return progress
@@ -70,6 +63,12 @@ def update_metrics(method):
     metrics[method] += 1
 
 
+def update_metrics2(method):
+    if method not in metrics2:
+        metrics2[method] = 0
+    metrics2[method] += 1
+
+
 def update_workers(method, value):
     if method not in workers:
         workers[method] = 0
@@ -88,7 +87,7 @@ def twint_callback(tweet, query_id):
 
 
 def worker_snscrape(query, date_init, date_end):
-    update_workers('snscrape', 1)
+    update_workers('WS', 1)
     try:
         log_filename = "logs\\fetcher_" + query + ".txt"
         if not os.path.exists(log_filename):
@@ -96,29 +95,69 @@ def worker_snscrape(query, date_init, date_end):
             log_file.write("")
             log_file.close()
         lines = open(log_filename, "r").read().split('\n')
-        if date_init in lines:
-            print('Skipping ' + date_init)
-            update_workers('snscrape', -1)
-            return
+        # if date_init in lines:
+        # print('Skipping ' + date_init)
+        # update_workers('WS', -1)
+        # return
         total = 0
         query_id = mongodb.get_query_id(query)
         for i, tweet in enumerate(TwitterSearchScraper(
                 query + ' since:' + date_init + ' until:' + date_end).get_items()):
-            total += mongodb.store({
+            r = mongodb.store({
                 'i': tweet.tweetID,
                 'q': query_id,
                 'd': tweet.date.timestamp(),
                 'f': tweet.favorite_count,
                 'r': tweet.retweet_count
             })
-            update_metrics('snscrape')
+            if r > 0:
+                update_metrics('WS')
+            update_metrics2('WS')
             if total == 0:
                 log_file = open(log_filename, "a+")
-                log_file.write(date_init+"\n")
+                log_file.write(date_init + "\n")
                 log_file.close()
     except Exception as ex:
         print(ex)
-    update_workers('snscrape', -1)
+    update_workers('WS', -1)
+
+
+import arrow
+import stweet as st
+import json
+
+
+def worker_stweet(query, date_init, date_end):
+    try:
+        update_workers('WS1', 1)
+        search_tweets_task = st.SearchTweetsTask(all_words=query, since=arrow.get(date_init, 'YYYY-MM-DDTHH:mm:ss'),
+                                                 until=arrow.get(date_end, 'YYYY-MM-DDTHH:mm:ss'))
+        st.TweetSearchRunner(search_tweets_task=search_tweets_task, tweet_raw_data_outputs=[StweetOutput()],
+                             user_raw_data_outputs=[]).run()
+        update_workers('WS1', -1)
+    except Exception as ex:
+        print(ex)
+
+
+class StweetOutput:
+    def export_raw_data(self, tweets):
+        for tweet in tweets:
+            try:
+                result = json.loads(tweet.raw_value)
+                q = mongodb.get_query_id(result['full_text'])
+                if q:
+                    r = mongodb.store({
+                        'i': result['id_str'],
+                        'q': q,
+                        'd': datetime.strptime(result['created_at'], '%a %b %d %H:%M:%S +0000 %Y').timestamp(),
+                        'f': result['favorite_count'],
+                        'r': result['retweet_count']
+                    })
+                    if r > 0:
+                        update_metrics('WS1')
+                    update_metrics2('WS1')
+            except Exception as ex:
+                print(ex)
 
 
 class Options:
@@ -145,3 +184,4 @@ if __name__ == '__main__':
             date_init = (start_date + timedelta(days=i)).isoformat()
             date_end = (start_date + timedelta(days=i + days)).isoformat()
             futures.append(executor.submit(worker_snscrape, args['query'], date_init, date_end))
+            futures.append(executor.submit(worker_stweet, args['query'], date_init, date_end))
