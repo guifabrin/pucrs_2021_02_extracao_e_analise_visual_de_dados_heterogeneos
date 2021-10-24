@@ -68,26 +68,27 @@
   const refs = []
   fetch('results.json?v='+Date.now()).then((response) => response.json()).then(result => {
       const tree = createTree('div_tree','white')
-      const ticker_queries = Object.keys(result)
-      const tickers = ticker_queries.map((item)=> item.split('_')[0]).filter((value, index, self) => self.indexOf(value) === index)
-        for (const tick of tickers) {
-            const ticker_node = tree.createNode(tick, false, 'images/' + tick + '.png');
-            for (const ticker_query of ticker_queries) {
-                const [tick_, query] = ticker_query.split('_')
-                if (tick === tick_) {
-                    const query_node = ticker_node.createChildNode(query, false, 'images/monitor.png');
-                    const timeframes = Object.keys(result[ticker_query])
-                    for (const timeframe of timeframes){
-                        const total = result[ticker_query][timeframe].map(item=> item.data['total_apply']-item.data['initial_apply']).reduce((a,b)=>a+b, 0)
-                        const time_frame_node = query_node.createChildNode(timeframe+' : R$ '+total.toFixed(2), false, 'images/monitor.png');
-                        refs.push({
-                          id: '#ul_'+time_frame_node.id,
-                          data: result[ticker_query][timeframe]
-                        })
-                    }
-                }
+      const tickers = Object.keys(result)
+      for (const tick of tickers) {
+          const queries = Object.keys(result[tick])
+          const ticker_node = tree.createNode(tick, false, 'images/' + tick + '.png');
+          for (const query of queries) {
+            const query_node = ticker_node.createChildNode(query, false, 'images/monitor.png');
+            const years = Object.keys(result[tick][query])
+            for (const year of years) {
+              const year_node = query_node.createChildNode(year, false, 'images/monitor.png');
+              const timeframes = Object.keys(result[tick][query][year])
+              for (const timeframe of timeframes){
+                const total = result[tick][query][year][timeframe].map(item=> item.data['total_apply']-item.data['initial_apply']).reduce((a,b)=>a+b, 0)
+                const frame_node = year_node.createChildNode(timeframe+' : R$ '+total.toFixed(2), false, 'images/monitor.png', false, 'images/monitor.png');
+                refs.push({
+                  id: '#ul_'+frame_node.id,
+                  data: result[tick][query][year][timeframe]
+                })
+              }
             }
-        }
+          }
+      }
     tree.drawTree();
     tree.expandTree();
     for (const ref of refs) {

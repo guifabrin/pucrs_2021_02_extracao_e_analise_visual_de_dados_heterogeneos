@@ -9,14 +9,25 @@ const result = {}
 for (const filePath of getFilesFrom(docs, 'plot.json')) {
   const [, ref, dates, timeframe] = filePath.split('\\')
   const [dateInit, dateEnd] = dates.split('_')
+  const [year] = dateInit.split('-')
+  const [tick, query] = ref.split('_')
   const rawData = fs.readFileSync(filePath)
-  if (!result[ref]) {
-    result[ref] = {}
+  if (!result[tick]) {
+    result[tick] = {}
   }
-  if (!result[ref][timeframe]) {
-    result[ref][timeframe] = []
+  if (!result[tick][query]) {
+    result[tick][query] = {}
   }
-  result[ref][timeframe].push({
+  if (!result[tick][query][year]) {
+    result[tick][query][year] = {}
+  }
+  if (!result[tick][query][year]) {
+    result[tick][query][year] = {}
+  }
+  if (!result[tick][query][year][timeframe]) {
+    result[tick][query][year][timeframe] = []
+  }
+  result[tick][query][year][timeframe].push({
     dateInit,
     dateEnd,
     data: JSON.parse(rawData)
