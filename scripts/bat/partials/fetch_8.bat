@@ -1,0 +1,10 @@
+python ..\..\src\fetch.py -q petrobras -s 2015-01-01 -u 2015-01-31 -t 12
+python ..\..\src\fetch.py -q petrobras -s 2021-04-01 -u 2021-04-30 -t 12
+python ..\..\src\fetch.py -q petrobras -s 2015-07-01 -u 2015-07-31 -t 12
+python ..\..\src\fetch.py -q petrobras -s 2018-03-01 -u 2018-03-31 -t 12
+python ..\..\src\fetch.py -q petrobras -s 2019-03-01 -u 2019-03-31 -t 12
+python ..\..\src\fetch.py -q petrobras -s 2018-06-01 -u 2018-06-30 -t 12
+python ..\..\src\fetch.py -q petrobras -s 2014-05-01 -u 2014-05-31 -t 12
+python ..\..\src\fetch.py -q petrobras -s 2014-11-01 -u 2014-11-30 -t 12
+python ..\..\src\fetch.py -q petrobras -s 2015-03-01 -u 2015-03-31 -t 12
+python ..\..\src\fetch.py -q petrobras -s 2018-11-01 -u 2018-11-30 -t 12

@@ -1,0 +1,10 @@
+start partials\fetch_0.bat
+start partials\fetch_1.bat
+start partials\fetch_2.bat
+start partials\fetch_3.bat
+start partials\fetch_4.bat
+start partials\fetch_5.bat
+start partials\fetch_6.bat
+start partials\fetch_7.bat
+start partials\fetch_8.bat
+start partials\fetch_9.bat

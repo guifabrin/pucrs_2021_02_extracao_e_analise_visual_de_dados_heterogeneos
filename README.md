@@ -30,12 +30,12 @@ PATH_TO_SAVE=C:\
 ### Examples
 - Run search from 2021-01-01 until 2021-01-02
 ```bash
-python fetch_and_store.py -q petrobras -s "2021-01-01"
+python fetch.py -q petrobras -s "2021-01-01"
 ```
 
 - Run search from 2021-01-01 until 2021-12-31
 ```bash
-python fetch_and_store.py -q petrobras -s "2021-01-01" -u "2021-12-31"
+python fetch.py -q petrobras -s "2021-01-01" -u "2021-12-31"
 ```
 
 ## Scrapper with selenium and chrome
@@ -49,12 +49,12 @@ python fetch_and_store.py -q petrobras -s "2021-01-01" -u "2021-12-31"
 ### Examples
 - Run search from 2021-01-01 until 2021-01-02
 ```bash
-python scrapper_selenium.py -q petrobras -s "2021-01-01"
+python scrap.py -q petrobras -s "2021-01-01"
 ```
 
 - Run search from 2021-01-01 until 2021-12-31
 ```bash
-python scrapper_selenium.py -q petrobras -s "2021-01-01" -u "2021-12-31"
+python scrap.py -q petrobras -s "2021-01-01" -u "2021-12-31"
 ```
 
 # Data Plot
@@ -84,4 +84,4 @@ python plot.py -t VALE3 -q brumadinho -s "2019-01-01 00:00:00" -u "2021-08-31 23
 ```
 
 ## Results
-Access [Generated results](https://guifabrin.github.io/pucrs_2021_02_extracao_e_analise_visual_de_dados_heterogeneos/)
+Access [Generated results](https://guifabrin.github.io/pucrs_tt_mt5/)

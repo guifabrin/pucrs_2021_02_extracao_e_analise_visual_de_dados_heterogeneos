@@ -6,5 +6,7 @@ chromedriver.exe
 data.csv
 **/*.spec
 *.toc
-build/**/*
 __pycache__
+node_modules
+build
+logs
