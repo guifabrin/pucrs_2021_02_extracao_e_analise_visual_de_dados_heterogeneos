@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { getFilesFrom } = require('./helpers')
 
-const docs = path.join(__dirname, '../../docs/')
+const docs = path.join(__dirname, '../../docs/reduced/')
 
 const result = {}
 

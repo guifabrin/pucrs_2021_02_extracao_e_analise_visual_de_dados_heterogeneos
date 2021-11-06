@@ -8,7 +8,7 @@ from datetime import timedelta
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-from src import mongodb
+from src.databases import mongodb
 
 imported = 0
 inserted = 0

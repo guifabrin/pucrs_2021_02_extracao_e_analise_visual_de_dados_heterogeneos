@@ -4,10 +4,10 @@ import os
 from datetime import datetime
 
 import MetaTrader5 as mt5
-from dotenv import dotenv_values
 
-config = dotenv_values("../../.env")
+from src.helper import load_config
 
+config = load_config()
 
 class Arg:
     def __init__(self):
@@ -20,9 +20,7 @@ class Arg:
         self.tick = None
         self.query = None
         self.lines = {}
-        self.ignore = True
-        if 'PATH_TO_SAVE' in config:
-            self.path_img = config['PATH_TO_SAVE']
+        self.ignore = False
 
     @property
     def mt5_timeframe(self):
@@ -82,6 +80,7 @@ def parse():
     ap.add_argument("-s", "--since", required=True, help="since date")
     ap.add_argument("-u", "--until", required=True, help="until date")
     ap.add_argument("-f", "--frame", required=True, help="frame data from mt5 lib like TIMEFRAME_H1")
+    ap.add_argument("-d", "--database", required=True, help="")
 
     ap.add_argument("-c", "--count", required=False, help="max ticks count")
     ap.add_argument("-m", "--favorite", required=False, help="favorite multiplier")
@@ -100,6 +99,8 @@ def parse():
     arg.since = datetime.strptime(args['since'], '%Y-%m-%d %H:%M:%S')
     arg.until = datetime.strptime(args['until'], '%Y-%m-%d %H:%M:%S')
     arg.frame = args['frame']
+    arg.database = args['database']
+    arg.path_img = config['PATH_TO_SAVE']+"\\"+arg.database+"\\"
 
     if args['count']:
         arg.count = args['count']

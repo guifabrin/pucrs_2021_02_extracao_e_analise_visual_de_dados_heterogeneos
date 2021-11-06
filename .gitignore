@@ -10,3 +10,14 @@ __pycache__
 node_modules
 build
 logs
+
+apache-tez/target/
+apache-tez/pom.xml.tag
+apache-tez/pom.xml.releaseBackup
+apache-tez/pom.xml.versionsBackup
+apache-tez/pom.xml.next
+apache-tez/release.properties
+apache-tez/dependency-reduced-pom.xml
+apache-tez/buildNumber.properties
+apache-tez/.mvn/timing.properties
+apache-tez/.mvn/wrapper/maven-wrapper.jar

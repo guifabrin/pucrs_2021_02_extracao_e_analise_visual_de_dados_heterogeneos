@@ -9,14 +9,15 @@
 		"py:fetch": "python src/makers/make_bat_fetch.py",
 		"bat:plot": "npm run py:plot && cd scripts/bat && plot.bat",
 		"bat:fetch": "npm run py:fetch && cd scripts/bat && fetch.bat",
-		"bat:build": "cd scripts/bat && build.bat"
+		"bat:build": "cd scripts/bat && build.bat",
+		"maven:build": "cd apache-tez/ && mvn install && mvn package"
 	},
 	"devDependencies": {
-		"eslint": "^7.32.0",
-		"eslint-config-google": "^0.14.0",
-		"eslint-config-standard": "^16.0.3",
-		"eslint-plugin-import": "^2.25.2",
-		"eslint-plugin-node": "^11.1.0",
-		"eslint-plugin-promise": "^5.1.1"
+		"eslint": "8.2.0",
+		"eslint-config-google": "0.14.0",
+		"eslint-config-standard": "16.0.3",
+		"eslint-plugin-import": "2.25.3",
+		"eslint-plugin-node": "11.1.0",
+		"eslint-plugin-promise": "5.1.1"
 	}
 }

@@ -8,8 +8,8 @@ from datetime import datetime, timedelta
 
 from dotenv import dotenv_values
 
-from mongodb import store, get_query_id
 from snscrape import TwitterSearchScraper
+from src.databases.mongodb import store, get_query_id
 
 config = dotenv_values("../../.env")
 
