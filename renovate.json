@@ -1,5 +1,8 @@
 {
-  "automerge": true,
-  "automergeType": "pr",
-  "automergeComment": "automergeComment"
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
+  ]
 }
